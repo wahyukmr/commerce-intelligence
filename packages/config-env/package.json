@@ -1,12 +1,15 @@
 {
-  "name": "@my/config-env",
+  "name": "@ci/config-env",
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
   "dependencies": {
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@my/config-typescript": "workspace:*"
+    "@ci/config-typescript": "workspace:*"
   }
 }

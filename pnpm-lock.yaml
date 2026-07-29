@@ -223,7 +223,7 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3
     devDependencies:
-      '@my/config-typescript':
+      '@ci/config-typescript':
         specifier: workspace:*
         version: link:../config-typescript
 

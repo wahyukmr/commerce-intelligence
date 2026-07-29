@@ -1,5 +1,5 @@
 {
-  "name": "@my/config-typescript",
+  "name": "@ci/config-typescript",
   "private": true,
   "version": "1.0.0",
   "files": ["*.json"]
