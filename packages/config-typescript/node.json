@@ -1,0 +1,10 @@
+{
+  "extends": "./base.json",
+
+  "compilerOptions": {
+
+    "types": ["node"],
+
+    "lib": ["ES2025"]
+  }
+}

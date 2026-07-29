@@ -210,9 +210,24 @@ importers:
       '@biomejs/biome':
         specifier: 2.5.5
         version: 2.5.5
+      '@types/node':
+        specifier: ^26.1.2
+        version: 26.1.2
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
+
+  packages/config-env:
+    dependencies:
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@my/config-typescript':
+        specifier: workspace:*
+        version: link:../config-typescript
+
+  packages/config-typescript: {}
 
 packages:
 
@@ -272,6 +287,9 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
+
+  '@types/node@26.1.2':
+    resolution: {integrity: sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg==}
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     resolution: {integrity: sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ==}
@@ -398,6 +416,12 @@ packages:
     engines: {node: '>=16.20.0'}
     hasBin: true
 
+  undici-types@8.3.0:
+    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
+
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
 snapshots:
 
   '@biomejs/biome@2.5.5':
@@ -434,6 +458,10 @@ snapshots:
 
   '@biomejs/cli-win32-x64@2.5.5':
     optional: true
+
+  '@types/node@26.1.2':
+    dependencies:
+      undici-types: 8.3.0
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     optional: true
@@ -517,3 +545,7 @@ snapshots:
       '@typescript/typescript-sunos-x64': 7.0.2
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
+
+  undici-types@8.3.0: {}
+
+  zod@4.4.3: {}

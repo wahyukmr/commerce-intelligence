@@ -1,4 +1,6 @@
 {
-  "extends": "./tsconfig.base.json",
-  "files": []
+  "files": [],
+  "references": [
+    {"path": "./packages/config-env"}
+  ]
 }
