@@ -10,6 +10,9 @@ lerna-debug.log*
 bundle-report.html
 
 .env
+.env.local
+.env.production.local
+.env.test.local
 
 node_modules
 dist
