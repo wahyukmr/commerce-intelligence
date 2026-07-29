@@ -5,7 +5,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "check": "biome check .",
+    "check:write": "biome check --write ."
   },
   "keywords": [],
   "author": "",
@@ -19,6 +23,7 @@
   },
   "type": "module",
   "devDependencies": {
+    "@biomejs/biome": "2.5.5",
     "typescript": "^7.0.2"
   }
 }
