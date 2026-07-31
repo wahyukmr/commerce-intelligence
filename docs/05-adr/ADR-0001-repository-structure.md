@@ -2,13 +2,7 @@
 
 > Status: Accepted
 >
-> Date: YYYY-MM-DD
->
-> Decision Makers: Platform Engineering
->
-> Supersedes: —
->
-> Superseded By: —
+> Date: 2026-07-31
 
 ---
 
@@ -99,8 +93,6 @@ Negatif
 ---
 
 ## Implementation Notes
-
-Aturan implementasi yang harus dipatuhi.
 
 - Apps hanya boleh mengimpor public API package.
 - Runtime tidak boleh mengimpor commerce.
