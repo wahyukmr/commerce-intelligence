@@ -217,7 +217,7 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
 
-  packages/config-env:
+  packages/shared/config-env:
     dependencies:
       zod:
         specifier: ^4.4.3
@@ -227,7 +227,7 @@ importers:
         specifier: workspace:*
         version: link:../config-typescript
 
-  packages/config-typescript: {}
+  packages/shared/config-typescript: {}
 
 packages:
 
