@@ -1,0 +1,3 @@
+{
+  "extends": "@ci/config-typescript/library.json"
+}
