@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ES2025",
     "module": "ESNext",
@@ -23,6 +24,18 @@
 
     "noImplicitOverride": true,
 
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "noPropertyAccessFromIndexSignature": true,
+
+    "useDefineForClassFields": true,
+
+    "esModuleInterop": true,
+
+    "declaration": true,
+
+    "declarationMap": true,
+
+    "sourceMap": true
   }
 }

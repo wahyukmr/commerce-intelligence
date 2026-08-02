@@ -1,0 +1,14 @@
+{
+  "name": "@ci/config-typescript",
+  "private": true,
+  "version": "0.1.0",
+  "files": [
+    "*.json"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./app.json": "./app.json",
+    "./node.json": "./node.json",
+    "./library.json": "./library.json"
+  }
+}
