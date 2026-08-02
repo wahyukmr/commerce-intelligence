@@ -1,6 +1,11 @@
 {
   "files": [],
   "references": [
-    {"path": "./packages/config-env"}
+    { "path": "./apps/dashboard" },
+    { "path": "./packages/config-env" },
+    { "path": "./packages/commerce" },
+    { "path": "./packages/runtime" },
+    { "path": "./packages/shared" },
+    { "path": "./packages/simulation" }
   ]
 }
