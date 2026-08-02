@@ -17,10 +17,12 @@ bundle-report.html
 node_modules
 dist
 dist-ssr
+coverage
 *.local
 
+.turbo
+
 # Editor directories and files
-.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -29,3 +31,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.tsbuildinfo
