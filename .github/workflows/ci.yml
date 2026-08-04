@@ -8,9 +8,19 @@ on:
     branches:
       - main
 
+# Mencegah penumpukan antrean job yang mubazir saat Anda buru-buru melakukan commit berulang
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
+    name: Verify Codebase
+    timeout-minutes: 15 # Keamanan agar tagihan CI tidak membengkak jika terjadi infinite loop
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     strategy:
       matrix:
@@ -19,6 +29,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 2 # Penting bagi Turborepo untuk membandingkan perubahan kode
+
+      - name: Set up Turborepo Remote Cache
+        uses: vercel/setup-turborepo-remote-cache-action@v1.0.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@8912a9102ac27614460f54aedde9e1e7f9aec20d # v6.0.5
@@ -32,7 +49,16 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
+
+      # OPTIMASI: Menyimpan hasil kompilasi build & typecheck Turborepo di server GitHub
+      - name: Setup Turborepo Cache
+        uses: actions/cache@v6
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Typecheck
         run: pnpm typecheck
