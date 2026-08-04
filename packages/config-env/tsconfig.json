@@ -1,3 +1,9 @@
 {
-  "extends": "@ci/config-typescript/node.json"
+  "extends": "@ci/config-typescript/node.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

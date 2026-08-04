@@ -15,9 +15,10 @@
     "lint": "biome check .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist .turbo"
   },
   "devDependencies": {
-    "@ci/config-typescript": "workspace:*"
+    "@ci/config-typescript": "workspace:*",
+    "typescript": "catalog:"
   }
 }

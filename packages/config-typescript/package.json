@@ -6,9 +6,10 @@
     "*.json"
   ],
   "exports": {
-    "./base.json": "./base.json",
-    "./app.json": "./app.json",
+    "./browser.json": "./browser.json",
+    "./library.json": "./library.json",
     "./node.json": "./node.json",
-    "./library.json": "./library.json"
+    "./react.json": "./react.json",
+    "./test.json": "./test.json"
   }
 }

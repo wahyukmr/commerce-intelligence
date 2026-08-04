@@ -1,6 +1,11 @@
 packages:
   - apps/*
   - packages/*
-  - '!**/node_modules/**'
+  - tooling/*
+
 allowBuilds:
   esbuild: true
+
+catalog:
+  typescript: ^7.0.2
+  "@types/node": ^26.1.2

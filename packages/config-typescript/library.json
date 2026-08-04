@@ -1,11 +1,23 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+
   "extends": "./base.json",
 
   "compilerOptions": {
+    "module": "ESNext",
+
+    "lib": ["ESNext"],
+
+    "composite": true,
+
     "declaration": true,
 
     "declarationMap": true,
 
-    "composite": true
+    "isolatedDeclarations": true,
+
+    "emitDeclarationOnly": true,
+
+    "noEmit": false
   }
 }

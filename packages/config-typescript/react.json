@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
 
-  "extends": "./base.json",
+  "extends": "./browser.json",
 
   "compilerOptions": {
-    "types": ["node"],
+    "jsx": "react-jsx",
 
-    "lib": ["ES2025"]
+    "types": ["vite/client"]
   }
 }
