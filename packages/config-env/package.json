@@ -15,8 +15,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "format": "biome format . --write",
-    "lint": "biome check .",
+    "lint": "biome check --write",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "clean": "rimraf dist .turbo"
