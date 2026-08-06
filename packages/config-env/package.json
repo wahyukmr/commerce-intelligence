@@ -13,8 +13,6 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
     "lint": "biome check --write",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
