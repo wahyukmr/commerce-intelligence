@@ -32,11 +32,6 @@ jobs:
         with:
           fetch-depth: 2 # Penting bagi Turborepo untuk membandingkan perubahan kode
 
-      - name: Set up Turborepo Remote Cache
-        uses: vercel/setup-turborepo-remote-cache-action@v1.0.0
-        with:
-          team: ${{ vars.TURBO_TEAM }}
-
       - name: Install pnpm and Node.js
         uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
         with:
@@ -59,3 +54,8 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      # - name: Set up Turborepo Remote Cache
+      #   uses: vercel/setup-turborepo-remote-cache-action@v1.0.0
+      #   with:
+      #     team: ${{ vars.TURBO_TEAM }}
