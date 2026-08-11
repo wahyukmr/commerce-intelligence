@@ -1,5 +1,5 @@
 {
   "extends": "@ci/config-typescript/node.json",
-  "include": ["src"],
-  "exclude": ["node_modules"]
+
+  "include": ["vitest.config.ts"]
 }

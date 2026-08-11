@@ -1,43 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-
   "compilerOptions": {
-    "target": "ESNext",
-
-    "moduleResolution": "Bundler",
-
     "strict": true,
-
-    "moduleDetection": "force",
-
     "isolatedModules": true,
-
-    "verbatimModuleSyntax": true,
-
-    "allowImportingTsExtensions": true,
-
-    "resolveJsonModule": true,
-
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-
-    "skipLibCheck": true,
-
     "forceConsistentCasingInFileNames": true,
-
-    "exactOptionalPropertyTypes": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noFallthroughCasesInSwitch": true,
-
-    "useDefineForClassFields": true,
-
-    "erasableSyntaxOnly": true,
-
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-
-    "noEmit": true
-  }
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
+  },
+  "exclude": ["node_modules"]
 }

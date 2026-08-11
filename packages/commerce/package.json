@@ -11,13 +11,15 @@
     "dist"
   ],
   "scripts": {
-    "lint": "biome check --write",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:watch": "vitest --watch",
     "clean": "rimraf dist .turbo"
   },
   "devDependencies": {
     "@ci/config-typescript": "workspace:*",
-    "typescript": "catalog:"
+    "@ci/config-vitest": "workspace:*"
   }
 }

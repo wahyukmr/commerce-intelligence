@@ -1,0 +1,4 @@
+{
+  "extends": "@ci/config-typescript/react-vite.json",
+  "include": ["src"]
+}

@@ -1,9 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-
-  "extends": "./react.json",
-
+  "extends": "./base.json",
   "compilerOptions": {
-    "types": ["vite/client", "vitest/globals"]
+    "jsx": "react-jsx"
   }
 }

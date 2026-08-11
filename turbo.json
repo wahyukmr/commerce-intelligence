@@ -1,8 +1,12 @@
 {
   "$schema": "./node_modules/turbo/schema.json",
+
+  "ui": "tui",
+
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**"]
     },
     "dev": {
@@ -10,15 +14,24 @@
       "persistent": true
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "outputs": []
     },
     "test": {
-      "dependsOn": ["build"],
-      "outputs": ["coverage/**"]
+      "inputs": ["$TURBO_DEFAULT$", "vitest.config.ts"],
+      "dependsOn": ["transit", "@ci/config-vitest#build"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true
     },
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
+    "transit": {
+      "dependsOn": ["^transit"]
+    },
+
     "clean": {
       "cache": false
     }

@@ -1,15 +1,6 @@
 {
   "name": "@ci/config-typescript",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.1.0",
-  "files": [
-    "*.json"
-  ],
-  "exports": {
-    "./browser.json": "./browser.json",
-    "./library.json": "./library.json",
-    "./node.json": "./node.json",
-    "./react.json": "./react.json",
-    "./test.json": "./test.json"
-  }
+  "license": "MIT"
 }
