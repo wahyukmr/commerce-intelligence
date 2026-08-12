@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const envSchema = z.object({
+export const sharedSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
 
   DATABASE_URL: z.url(),
@@ -12,4 +12,4 @@ export const envSchema = z.object({
   LOG_LEVEL: z.enum(["trace", "debug", "info", "warn", "error"]),
 });
 
-export const env = envSchema.parse(process.env);
+export const sharedEnv = sharedSchema.parse(process.env);

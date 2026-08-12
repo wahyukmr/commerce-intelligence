@@ -11,8 +11,7 @@ bundle-report.html
 
 .env
 .env.local
-.env.production.local
-.env.test.local
+.env.*.local
 
 node_modules
 dist

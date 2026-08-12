@@ -11,7 +11,10 @@
     "dist"
   ],
   "scripts": {
-    "lint": "biome check --write",
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest --watch",
@@ -19,6 +22,6 @@
   },
   "devDependencies": {
     "@ci/config-typescript": "workspace:*",
-    "typescript": "catalog:"
+    "@ci/config-vitest": "workspace:*"
   }
 }
