@@ -1,8 +1,6 @@
 {
   "$schema": "./node_modules/turbo/schema.json",
-
   "ui": "tui",
-
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -26,12 +24,11 @@
       "persistent": true
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"]
+      "dependsOn": ["^typecheck", "@ci/config-vitest#build"]
     },
     "transit": {
       "dependsOn": ["^transit"]
     },
-
     "clean": {
       "cache": false
     }

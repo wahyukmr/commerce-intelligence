@@ -1,17 +1,27 @@
 {
   "name": "@ci/config-vitest",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
-
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-
   "exports": {
-    ".": "./dist/index.js",
-    "./base": "./dist/base-config.js",
-    "./web": "./dist/web-config.js",
-    "./node": "./dist/node-config.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./base": {
+      "types": "./dist/base-config.d.ts",
+      "import": "./dist/base-config.js"
+    },
+    "./web": {
+      "types": "./dist/web-config.d.ts",
+      "import": "./dist/web-config.js"
+    },
+    "./node": {
+      "types": "./dist/node-config.d.ts",
+      "import": "./dist/node-config.js"
+    }
   },
   "scripts": {
     "build": "tsc",
@@ -21,11 +31,9 @@
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist .turbo"
   },
-
   "dependencies": {
     "vitest": "catalog:"
   },
-
   "devDependencies": {
     "@ci/config-typescript": "workspace:*",
     "jsdom": "26.1.0",
