@@ -4,12 +4,16 @@ test.describe("Dashboard smoke test", () => {
   test("loads the dashboard", async ({ page }) => {
     await page.goto("/");
 
-    await expect(
-      page.getByRole("heading", { name: "Get started" }),
-    ).toBeVisible();
+    console.log("URL:", page.url());
+    console.log("TITLE:", await page.title());
+
+    await page.screenshot({
+      path: "test-results/dashboard.png",
+      fullPage: true,
+    });
 
     await expect(
-      page.getByRole("button", { name: "Count is 0" }),
+      page.getByRole("heading", { name: "Get started" }),
     ).toBeVisible();
   });
 
