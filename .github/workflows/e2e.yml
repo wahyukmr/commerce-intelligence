@@ -1,0 +1,52 @@
+name: Vercel Deployment E2E
+
+on:
+  repository_dispatch:
+    types:
+      - vercel.deployment.ready
+
+concurrency:
+  group: vercel-e2e-${{ github.event.client_payload.git.sha }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Vercel / Dashboard E2E
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    strategy:
+      matrix:
+        node-version: [24]
+
+    steps:
+      - name: Checkout deployed commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.client_payload.git.sha }}
+
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c # v2.0.0
+        with:
+          runtime: node@${{ matrix.node-version }}
+          cache: true
+
+      - name: Install Playwright
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        id: e2e
+        run: pnpm test:e2e
+        env:
+          BASE_URL: ${{ github.event.client_payload.url }}
+
+      - name: Report result to Vercel
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: "Vercel / Dashboard E2E"
+          state: ${{ steps.e2e.outcome == 'success' && 'success' || 'error' }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
