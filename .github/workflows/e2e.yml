@@ -17,6 +17,7 @@ jobs:
 
     permissions:
       contents: read
+      statuses: write
 
     strategy:
       matrix:
@@ -37,6 +38,16 @@ jobs:
       - name: Install Playwright
         run: pnpm exec playwright install --with-deps chromium
 
+      - name: Debug deployment
+        run: |
+          echo "BASE_URL=$BASE_URL"
+          curl -I "$BASE_URL"
+          curl -L "$BASE_URL" -o /tmp/page.html
+          echo "---- TITLE / HTML HEAD ----"
+          head -n 40 /tmp/page.html
+        env:
+          BASE_URL: ${{ github.event.client_payload.url }}
+
       - name: Run E2E tests
         id: e2e
         run: pnpm test:e2e
@@ -48,5 +59,4 @@ jobs:
         uses: vercel/repository-dispatch/actions/status@v1
         with:
           name: "Vercel / Dashboard E2E"
-          state: ${{ steps.e2e.outcome == 'success' && 'success' || 'error' }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
