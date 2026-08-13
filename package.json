@@ -2,6 +2,7 @@
   "name": "commerce-intelligence",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.17.0",
   "main": "index.js",
   "scripts": {
     "dev": "turbo run dev",
