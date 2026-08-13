@@ -54,6 +54,3 @@ jobs:
 
       - name: Build
         run: pnpm build
-
-      - name: Deployment Check Failure Injection
-        run: exit 1
