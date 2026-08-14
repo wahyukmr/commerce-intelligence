@@ -13,7 +13,7 @@ test.describe("Dashboard smoke test", () => {
     });
 
     await expect(
-      page.getByRole("heading", { name: "Get started" }),
+      page.getByRole("heading", { name: "THIS MUST NOT EXIST" }),
     ).toBeVisible();
   });
 
