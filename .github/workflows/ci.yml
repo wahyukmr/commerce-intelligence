@@ -43,7 +43,7 @@ jobs:
         with:
           team: ${{ vars.TURBO_TEAM }}
           audience: ${{ secrets.TURBO_AUDIENCE }}
-          policy_id: ${{ secrets.TURBO_POLICY_ID }}
+          policy: ${{ secrets.TURBO_POLICY_ID }}
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
