@@ -32,18 +32,18 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c
+        with:
+          runtime: node@${{ matrix.node-version }}
+          cache: true
+
       - name: Setup Turborepo Remote Cache
         uses: vercel/setup-turborepo-remote-cache-action@v1.0.0
         with:
           team: ${{ vars.TURBO_TEAM }}
           audience: ${{ secrets.TURBO_AUDIENCE }}
           policy: ${{ secrets.TURBO_POLICY_ID }}
-
-      - name: Install pnpm and Node.js
-        uses: pnpm/setup@c9883cc79df532ad1a7b81bf9ab944ceb090d65c
-        with:
-          runtime: node@${{ matrix.node-version }}
-          cache: true
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
