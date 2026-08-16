@@ -33,7 +33,7 @@ jobs:
           fetch-depth: 2
 
       - name: Setup Turborepo Remote Cache
-        uses: vercel/setup-turborepo-remote-cache-action@v1
+        uses: vercel/setup-turborepo-remote-cache-action@v1.0.0
         with:
           team: ${{ vars.TURBO_TEAM }}
           audience: ${{ secrets.TURBO_AUDIENCE }}
