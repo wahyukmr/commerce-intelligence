@@ -39,6 +39,7 @@ jobs:
           cache: true
 
       - name: Setup Turborepo Remote Cache
+        if: github.event.pull_request == null || github.event.pull_request.head.repo.full_name == github.repository
         uses: vercel/setup-turborepo-remote-cache-action@v1.0.0
         with:
           team: ${{ vars.TURBO_TEAM }}
