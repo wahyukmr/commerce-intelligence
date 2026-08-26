@@ -12,9 +12,7 @@ test.describe("Dashboard smoke test", () => {
       fullPage: true,
     });
 
-    await expect(
-      page.getByRole("heading", { name: "Get started" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Get started" })).toBeVisible();
   });
 
   test("counter works", async ({ page }) => {
@@ -24,8 +22,6 @@ test.describe("Dashboard smoke test", () => {
 
     await counter.click();
 
-    await expect(
-      page.getByRole("button", { name: "Count is 1" }),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Count is 1" })).toBeVisible();
   });
 });

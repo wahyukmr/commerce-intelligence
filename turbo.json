@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/turbo/schema.json",
   "ui": "tui",
+  "globalPassThroughEnv": ["BASE_URL", "VERCEL_AUTOMATION_BYPASS_SECRET", "CI"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

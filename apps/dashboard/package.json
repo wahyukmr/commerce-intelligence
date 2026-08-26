@@ -11,6 +11,8 @@
     "lint:fix": "biome check --write .",
     "typecheck": "tsc -b",
     "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
     "test:watch": "vitest --watch",
     "clean": "rimraf dist .vite .turbo"
   },
@@ -21,6 +23,7 @@
   "devDependencies": {
     "@ci/config-typescript": "workspace:*",
     "@ci/config-vitest": "workspace:*",
+    "@ci/config-env": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",

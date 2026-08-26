@@ -1,5 +1,5 @@
 {
   "extends": "@ci/config-typescript/node.json",
 
-  "include": ["vitest.config.ts"]
+  "include": ["vitest.config.ts", "playwright.config.ts"]
 }

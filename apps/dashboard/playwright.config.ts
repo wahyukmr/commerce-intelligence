@@ -1,24 +1,36 @@
+import { e2eEnv } from "@ci/config-env/e2e";
 import { defineConfig, devices } from "@playwright/test";
 
-const externalBaseURL = process.env.BASE_URL;
-const bypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+const isCI = e2eEnv.CI;
+const externalBaseURL = e2eEnv.BASE_URL;
 
 export default defineConfig({
-  testDir: "./test/e2e",
+  testDir: "./e2e",
 
-  forbidOnly: !!process.env.CI,
+  forbidOnly: isCI,
   fullyParallel: true,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 2 : undefined,
+  retries: isCI ? 2 : 0,
+  workers: isCI ? 2 : undefined,
 
-  reporter: [["html"], ["list"]],
+  reporter: isCI
+    ? [
+        [
+          "html",
+          {
+            outputFolder: "playwright-report",
+            open: "never",
+          },
+        ],
+        ["github"],
+      ]
+    : [["list"]],
 
   use: {
     baseURL: externalBaseURL ?? "http://127.0.0.1:4173",
 
-    extraHTTPHeaders: bypassSecret
+    extraHTTPHeaders: e2eEnv.VERCEL_AUTOMATION_BYPASS_SECRET
       ? {
-          "x-vercel-protection-bypass": bypassSecret,
+          "x-vercel-protection-bypass": e2eEnv.VERCEL_AUTOMATION_BYPASS_SECRET,
           "x-vercel-set-bypass-cookie": "samesitenone",
         }
       : undefined,
@@ -41,6 +53,6 @@ export default defineConfig({
         command:
           "pnpm exec turbo run build --filter=dashboard && pnpm --filter=dashboard preview --host 127.0.0.1",
         url: "http://127.0.0.1:4173",
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: !isCI,
       },
 });

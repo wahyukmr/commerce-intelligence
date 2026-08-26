@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./shared": "./src/shared.ts",
+    "./server": "./src/server.ts",
+    "./e2e": "./src/e2e.ts"
   },
   "scripts": {
     "lint": "biome check .",
