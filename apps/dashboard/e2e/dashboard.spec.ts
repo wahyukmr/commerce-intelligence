@@ -1,14 +1,14 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("Dashboard smoke test", () => {
-  test("loads the dashboard", async ({ page }) => {
+  test("loads the dashboard", async ({ page }, testInfo) => {
     await page.goto("/");
 
     console.log("URL:", page.url());
     console.log("TITLE:", await page.title());
 
     await page.screenshot({
-      path: "test-results/dashboard.png",
+      path: testInfo.outputPath("dashboard.png"),
       fullPage: true,
     });
 
