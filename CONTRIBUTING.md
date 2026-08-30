@@ -40,6 +40,7 @@ Every pull request must:
 - Pass tests
 - Follow package boundaries
 - Respect ADR decisions
+- Avoid introducing package-level version changes unless explicitly required by the release model
 
 ## Public API
 
