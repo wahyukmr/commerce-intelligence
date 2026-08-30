@@ -1,75 +1,229 @@
-# React + TypeScript + Vite
+# Commerce Intelligence Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The dashboard is the reference React/Vite application for the Commerce Intelligence Platform.
 
-Currently, two official plugins are available:
+It provides the application-facing interface for exploring commerce intelligence capabilities and serves as the primary deployable application in the monorepo.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Responsibilities
 
-## React Compiler
+The dashboard is responsible for:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* presenting Commerce Intelligence workflows;
+* consuming internal platform packages through the pnpm workspace;
+* providing the reference user interface;
+* providing browser-level end-to-end coverage through Playwright.
 
-## Expanding the ESLint configuration
+The dashboard is an application, not an independently published package.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Technology
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+* React
+* TypeScript
+* Vite
+* Vitest
+* Playwright
+* Biome
+* pnpm Workspace
+* Turborepo
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Repository Position
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The dashboard sits at the application boundary of the monorepo:
 
+```text
+Commerce Intelligence
+│
+├── apps/
+│   └── dashboard/
+│       └── React/Vite application
+│
+└── packages/
+    ├── runtime/
+    ├── commerce/
+    ├── simulation/
+    ├── shared/
+    └── config-*/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The dashboard consumes internal packages through workspace dependencies such as:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```json
+{
+  "dependencies": {
+    "@ci/runtime": "workspace:*"
+  }
+}
 ```
+
+Internal packages are implementation boundaries of the platform and are not independently published.
+
+## Development
+
+From the repository root:
+
+```bash
+pnpm dev
+```
+
+This runs the workspace development tasks through Turborepo.
+
+To work directly with the dashboard package:
+
+```bash
+pnpm --filter dashboard dev
+```
+
+The Vite development server provides hot module replacement during development.
+
+## Build
+
+Build the dashboard directly:
+
+```bash
+pnpm --filter dashboard build
+```
+
+Or build the complete workspace from the repository root:
+
+```bash
+pnpm build
+```
+
+The dashboard build runs TypeScript project compilation followed by the Vite production build.
+
+## Type Checking
+
+Run the dashboard type check:
+
+```bash
+pnpm --filter dashboard typecheck
+```
+
+Or run type checking across the workspace:
+
+```bash
+pnpm typecheck
+```
+
+## Unit Tests
+
+Run dashboard unit tests:
+
+```bash
+pnpm --filter dashboard test
+```
+
+Or run all workspace tests:
+
+```bash
+pnpm test
+```
+
+Tests use Vitest.
+
+## End-to-End Tests
+
+Run dashboard Playwright tests:
+
+```bash
+pnpm test:e2e
+```
+
+Run them in headed mode while debugging:
+
+```bash
+pnpm test:e2e:debug
+```
+
+The E2E suite validates browser-level application behavior rather than individual package implementation details.
+
+## Linting
+
+The repository uses Biome.
+
+Run the dashboard lint check:
+
+```bash
+pnpm --filter dashboard lint
+```
+
+Apply available fixes:
+
+```bash
+pnpm --filter dashboard lint:fix
+```
+
+Repository-wide linting can be run with:
+
+```bash
+pnpm lint
+```
+
+## Environment Configuration
+
+Environment configuration is validated through the repository's shared environment configuration package.
+
+Do not commit secrets or environment-specific credentials.
+
+For environment requirements and configuration policy, see the repository documentation:
+
+* [Environment and Architecture](../../docs/architecture.md)
+* [Development Workflow](../../docs/development.md)
+
+## Testing Expectations
+
+Changes to dashboard behavior should include appropriate automated coverage.
+
+Use:
+
+* Vitest for unit and component-level behavior;
+* Playwright for browser-level workflows and integration behavior.
+
+A dashboard pull request should pass the repository checks before merge:
+
+```bash
+pnpm check
+pnpm build
+```
+
+When browser behavior is affected, also run:
+
+```bash
+pnpm test:e2e
+```
+
+## Contribution Workflow
+
+Dashboard changes follow the same repository contribution workflow as the rest of the monorepo:
+
+```text
+Issue / Task
+     ↓
+Feature Branch
+     ↓
+Implementation
+     ↓
+Tests
+     ↓
+Local Validation
+     ↓
+Pull Request
+     ↓
+CI
+     ↓
+Code Review
+     ↓
+Squash Merge
+```
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for the complete contribution workflow.
+
+## Release Model
+
+The dashboard is currently the primary deployable application and therefore belongs to the application-level release boundary.
+
+Internal package changes that affect the dashboard are released as part of the application/system.
+
+The dashboard does not use independent package releases or Changesets.
+
+See [Release Process](../../docs/release.md) for the repository release model.
