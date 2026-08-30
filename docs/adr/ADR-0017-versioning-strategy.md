@@ -1,7 +1,19 @@
 # ADR-0017 — Versioning Strategy
 
-* **Status:** Accepted
+* **Status:** Superseded
 * **Date:** 2026-08-17
+* **Superseded by:** ADR-0022
+
+---
+## Supersession
+
+This decision has been superseded by [ADR-0022 — Adopt Application-Level Release Boundaries](./ADR-0022-application-level-release-boundaries.md).
+
+The repository initially adopted Changesets to provide package-level version metadata and preserve a future path toward package publication.
+
+After evaluating the actual release model of the repository, the internal packages are not independently published, consumed externally, or released on independent cadences. The deployable release boundary is the Commerce Intelligence application/system.
+
+ADR-0022 therefore replaces Changesets-based package versioning with an application-level release model.
 
 ---
 
