@@ -303,8 +303,6 @@ Unsafe type assertions should be avoided whenever possible.
 
 Applications use Vite.
 
-Libraries use tsc.
-
 Do not introduce additional build tools without architectural discussion.
 
 ## Testing Guidelines
