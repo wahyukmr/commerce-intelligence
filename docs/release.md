@@ -1,101 +1,51 @@
 # Release Guide <!-- omit in toc -->
 
-This document describes how changes move from development into the main branch and how internal package versions are managed.
-
-Although this repository is private, releases should remain deterministic, traceable, and reproducible.
+This document describes how changes move from development into the `main` branch and how releases are created for the Commerce Intelligence Platform.
 
 ## Table of Contents <!-- omit in toc -->
-
 - [Release Philosophy](#release-philosophy)
-- [Branch Strategy](#branch-strategy)
-- [Development Workflow](#development-workflow)
+- [Release Boundary](#release-boundary)
 - [Versioning Strategy](#versioning-strategy)
-- [Changesets](#changesets)
-- [Writing Changesets](#writing-changesets)
+- [Development Workflow](#development-workflow)
 - [Pull Requests](#pull-requests)
-- [Merge Strategy](#merge-strategy)
+- [CI Validation](#ci-validation)
 - [Release Process](#release-process)
-- [Dependency Updates](#dependency-updates)
+- [Release Notes](#release-notes)
 - [Breaking Changes](#breaking-changes)
+- [Dependency Updates](#dependency-updates)
+- [Future Introduction of Package Releases](#future-introduction-of-package-releases)
 - [Rollback Strategy](#rollback-strategy)
-
 
 ## Release Philosophy
 
-The repository follows a trunk-based development model.
+The repository is an application-oriented monorepo.
 
-* `main` is always releasable.
-* Changes are integrated through short-lived branches.
-* Every merged pull request must pass the CI pipeline.
-* Every release should be reproducible from Git history.
+The workspace contains internal packages that are consumed through the pnpm workspace and a deployable `dashboard` application. Internal packages are implementation and architecture boundaries, not independently released products.
 
-The release process should never depend on manual edits to package versions.
+The repository therefore uses an application-level release model.
 
-## Branch Strategy
+The release boundary is the Commerce Intelligence application/system rather than individual workspace packages.
 
-The repository uses the following branch conventions.
+The release process should remain:
 
-```text id="dctwsg"
-main
+* deterministic;
+* traceable;
+* reproducible from Git history;
+* validated by CI;
+* independent of package-level release metadata.
 
-feature/*
+## Release Boundary
 
-fix/*
+The repository currently contains:
 
-refactor/*
+* `apps/dashboard` — deployable React/Vite application;
+* `packages/*` — internal packages and shared configuration.
 
-docs/*
+Internal packages are not published to npm or consumed by external repositories.
 
-build/*
+Internal dependencies must use the workspace protocol:
 
-test/*
-
-ci/*
-```
-
-Rules:
-
-* Never commit directly to `main`.
-* Keep feature branches focused on one objective.
-* Delete merged branches.
-
-## Development Workflow
-
-```text id="8o3ry9"
-Create Branch
-      │
-      ▼
-Implement Changes
-      │
-      ▼
-Run Local Validation
-      │
-      ▼
-Commit
-      │
-      ▼
-Push
-      │
-      ▼
-Open Pull Request
-      │
-      ▼
-Code Review
-      │
-      ▼
-CI
-      │
-      ▼
-Squash Merge
-```
-
-## Versioning Strategy
-
-Internal packages use the workspace protocol.
-
-Example:
-
-```json id="mjlwmv"
+```json
 {
   "dependencies": {
     "@ci/shared": "workspace:*"
@@ -103,52 +53,66 @@ Example:
 }
 ```
 
-Do not reference internal packages using explicit versions.
+Internal package versions are therefore not release boundaries.
 
-The workspace protocol resolves local package links during workspace development; it does not make package versions identical.
+A change to an internal package is released as part of the application/system that consumes it.
 
-## Changesets
+## Versioning Strategy
 
-The repository uses Changesets to record release intent.
+The repository does not maintain independent release versions for internal workspace packages.
 
-Create a changeset whenever a pull request changes:
+Do not introduce package-level version bumps merely because a package implementation changes.
 
-* public APIs;
-* package behavior;
-* package dependencies;
-* developer-facing functionality.
+Internal package manifests may continue to contain a `version` field where required by package tooling, but that field does not represent an independently published release.
 
-Pure refactoring that does not change behavior does not require a changeset unless repository policy states otherwise.
+Internal dependencies must continue to use the workspace protocol rather than explicit package versions.
 
-Create a changeset:
+## Development Workflow
 
-```bash id="cjlwmr"
-pnpm changeset
+Changes follow the repository contribution workflow:
+
+```text
+Create Branch
+     │
+     ▼
+Implement Changes
+     │
+     ▼
+Run Local Validation
+     │
+     ▼
+Commit
+     │
+     ▼
+Push
+     │
+     ▼
+Open Pull Request
+     │
+     ▼
+Code Review
+     │
+     ▼
+CI
+     │
+     ▼
+Squash Merge
 ```
 
-## Writing Changesets
+The expected local validation is:
 
-A changeset should describe the observable change. Good:
-
-```text id="4nl0v7"
-Add support for tiered pricing.
-
-Improve inventory reservation performance.
-
-Introduce runtime cache abstraction.
+```bash
+pnpm check
+pnpm build
 ```
 
-Avoid:
+When applicable, run:
 
-```text id="b7w0tr"
-Update files.
-
-Refactor.
-
-Misc changes.
+```bash
+pnpm test:e2e
 ```
 
-The description should help future developers understand why the release exists.
+before opening or updating the pull request.
 
 ## Pull Requests
 
@@ -158,83 +122,119 @@ Each pull request should:
 * remain reviewable;
 * include tests for behavior changes;
 * update documentation when necessary;
-* include a changeset when appropriate.
+* respect package boundaries;
+* follow applicable ADRs;
+* use a Conventional Commit message for the eventual squash commit.
 
-Avoid combining unrelated changes into a single pull request.
+Changesets are not required.
 
-## Merge Strategy
+A pull request does not need to create package release metadata.
 
-The repository uses **Squash Merge**.
+## CI Validation
 
-Reasons:
+Every pull request targeting `main` must pass the repository CI pipeline.
 
-* cleaner history;
-* one logical commit per pull request;
-* consistent Conventional Commit messages.
+CI validates:
 
-The squash commit message should follow Conventional Commits.
+* formatting and linting through Biome;
+* TypeScript type checking;
+* automated tests;
+* production builds.
 
-Example:
+Deployment-specific E2E verification is performed by the Vercel deployment workflow after a deployment becomes ready.
 
-```text id="jstwk7"
-feat(commerce): support tiered pricing
-```
+The repository does not use Changesets as a CI gate.
 
 ## Release Process
 
-When preparing a release:
+A release represents a deployable state of the Commerce Intelligence application.
 
-1. Ensure `main` is green.
-2. Pull the latest changes.
-3. Install dependencies.
-4. Generate release versions.
-5. Review generated changes.
-6. Commit release metadata.
-7. Push to `main`.
+The release process is:
 
-Typical workflow:
-
-```bash id="hxm3iu"
-pnpm install
-
-pnpm changeset version
-
-pnpm build
-
-pnpm test
+```text
+Pull Request
+     │
+     ▼
+CI validation
+     │
+     ▼
+Code Review
+     │
+     ▼
+Squash Merge
+     │
+     ▼
+main
+     │
+     ▼
+Deployment
+     │
+     ▼
+Deployment E2E verification
 ```
 
-If publishing is introduced in the future, it should occur only after successful validation.
+A release does not require updating versions for every internal package.
 
-## Dependency Updates
+When a release needs an explicit version identifier, the version belongs to the application/system release rather than to individual internal packages.
 
-Update dependencies regularly.
+The release identifier should be derived from Git history and deployment metadata rather than manually synchronizing versions across internal packages.
 
-Preferred order:
+## Release Notes
 
-1. Patch
-2. Minor
-3. Major
+Release notes should describe user-visible or operationally significant changes at the application/system level.
 
-Every dependency update should pass:
+Examples:
 
-* lint
-* typecheck
-* tests
-* build
+* Add tiered pricing analytics.
+* Improve inventory reservation performance.
+* Add simulation scenario controls.
+* Fix dashboard projection rendering.
+* Update runtime execution behavior.
 
-before merging.
+Release notes should not list internal package version bumps unless package versioning becomes an explicit release requirement in the future.
 
 ## Breaking Changes
 
-Breaking changes require:
+Breaking changes are evaluated at the application and architecture boundaries.
 
+A breaking change may require:
+
+* an ADR;
 * documentation updates;
 * migration guidance;
-* architectural review;
-* explicit mention in the changeset.
+* affected tests;
+* explicit mention in release notes.
 
-Avoid unnecessary breaking changes for internal consumers.
+A changeset is not required.
+
+Internal package API changes should be evaluated based on their consumers and the application behavior they affect.
+
+## Dependency Updates
+
+Dependency updates should continue to follow the repository dependency management policy.
+
+Every dependency update must pass:
+
+* lint;
+* typecheck;
+* tests;
+* build.
+
+Internal workspace dependencies must continue to use the workspace protocol.
+
+## Future Introduction of Package Releases
+
+Changesets or another release-management tool may be introduced in the future if the repository changes its release model.
+
+Examples of such changes include:
+
+* an internal package is published to a private registry;
+* a package gains consumers outside this repository;
+* packages acquire independent release cadences;
+* package-level changelogs become a requirement;
+* package versions become part of an external compatibility contract.
+
+If any of these conditions become true, the release strategy must be revisited through an ADR before introducing package-level release tooling.
 
 ## Rollback Strategy
 
@@ -243,7 +243,7 @@ If a release introduces a regression:
 1. Identify the offending commit.
 2. Reproduce the issue.
 3. Prefer a targeted fix.
-4. If necessary, revert the commit.
-5. Restore CI to green before continuing development.
+4. If necessary, revert the offending change.
+5. Restore CI and deployment verification to green.
 
 Do not rewrite published Git history on the default branch.

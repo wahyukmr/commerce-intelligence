@@ -24,22 +24,22 @@ The pnpm workspace also declares `tooling/*`, but no tooling workspace exists in
 
 ## Technology
 
-| Category               | Technology         |
-| ---------------------- | ------------------ |
-| Language               | TypeScript 7       |
-| Runtime                | Node.js 24 LTS     |
-| Package Manager        | pnpm 11            |
-| Workspace              | pnpm Workspace     |
-| Build Orchestration    | Turborepo          |
-| Frontend               | React              |
-| Bundler                | Vite               |
-| Library Builder        | TypeScript (`tsc`) |
-| Testing                | Vitest             |
-| Linting                | Biome              |
-| Formatting             | Biome              |
-| Git Hooks              | Husky              |
-| Versioning             | Changesets         |
-| Environment Validation | Zod                |
+| Category               | Technology                 |
+| ---------------------- | -------------------------- |
+| Language               | TypeScript 7               |
+| Runtime                | Node.js 24 LTS             |
+| Package Manager        | pnpm 11                    |
+| Workspace              | pnpm Workspace             |
+| Build Orchestration    | Turborepo                  |
+| Frontend               | React                      |
+| Bundler                | Vite                       |
+| Library Builder        | TypeScript (`tsc`)         |
+| Testing                | Vitest                     |
+| Linting                | Biome                      |
+| Formatting             | Biome                      |
+| Git Hooks              | Husky                      |
+| Release Model          | Application-level releases |
+| Environment Validation | Zod                        |
 
 ## Quick Start
 
@@ -73,7 +73,7 @@ pnpm check
 | Coding conventions                | [conventions.md](conventions.md)   |
 | Local workflow                    | [development.md](development.md)   |
 | Testing                           | [testing.md](testing.md)           |
-| Releases and Changesets           | [release.md](release.md)           |
+| Release Process                   | [release.md](release.md)           |
 | Architectural decisions           | [adr/](adr/)                       |
 
 Update the relevant canonical document when implementation changes. ADRs explain why a decision was made; they do not replace current operational instructions.
