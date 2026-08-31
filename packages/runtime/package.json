@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest --watch",
-    "clean": "rimraf .turbo"
+    "clean": "rimraf .turbo node_modules"
   },
   "devDependencies": {
     "@ci/config-typescript": "workspace:*",
