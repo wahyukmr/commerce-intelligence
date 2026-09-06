@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 The monorepo uses Turborepo to orchestrate builds, tests, and type checks across packages. As the repository grows, repeated work across CI and local runs becomes increasingly expensive.
@@ -17,8 +15,6 @@ Without a shared cache:
 * build and test costs rise without adding product value.
 
 The repository already relies on GitHub Actions for validation and uses Vercel as a platform partner. A shared remote cache provides a natural fit with the existing toolchain and deployment ecosystem.
-
----
 
 ## Decision
 
@@ -33,8 +29,6 @@ The workflow sets up the remote cache with:
 
 This configuration is applied in `.github/workflows/ci.yml` so tasks can reuse cached artifacts across CI runs and related executions.
 
----
-
 ## Rationale
 
 The remote cache improves build efficiency by reusing previously computed task outputs instead of rerunning the same work.
@@ -47,8 +41,6 @@ This provides:
 * better alignment with the Vercel ecosystem used by the application.
 
 A shared cache is especially valuable in a monorepo where many tasks share dependency graphs and compile artifacts across packages.
-
----
 
 ## Consequences
 
@@ -65,8 +57,6 @@ A shared cache is especially valuable in a monorepo where many tasks share depen
 * Repository secrets and variables must be maintained for cache access.
 * Cache invalidation and policy changes require governance to avoid stale artifacts.
 
----
-
 ## Alternatives Considered
 
 ### Local Cache Only
@@ -80,8 +70,6 @@ A local cache helps individual machines but does not share results across CI run
 Rejected.
 
 Running all tasks from scratch for every validation cycle increases time and cost without improving correctness. This approach does not scale as the monorepo grows.
-
----
 
 ## Review
 

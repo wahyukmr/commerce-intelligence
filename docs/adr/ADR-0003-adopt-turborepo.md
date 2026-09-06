@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 As the number of packages increases, executing every build, test, and typecheck becomes unnecessarily expensive.
@@ -16,8 +14,6 @@ The repository requires:
 * local caching;
 * optional remote caching;
 * workspace filtering.
-
----
 
 ## Decision
 
@@ -32,8 +28,6 @@ Repository tasks include:
 * test;
 * clean.
 
----
-
 ## Rationale
 
 Turborepo provides:
@@ -43,8 +37,6 @@ Turborepo provides:
 * parallel execution;
 * simple configuration;
 * excellent integration with pnpm.
-
----
 
 ## Consequences
 
@@ -59,8 +51,6 @@ Turborepo provides:
 
 Developers should understand task dependencies when introducing new workspace scripts.
 
----
-
 ## Alternatives Considered
 
 ### Nx
@@ -74,8 +64,6 @@ Nx offers a larger feature set but introduces additional concepts and configurat
 Rejected.
 
 Custom orchestration would become difficult to maintain as the repository grows.
-
----
 
 ## Review
 

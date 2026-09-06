@@ -3,15 +3,11 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Every additional dependency introduces maintenance, security, licensing, and upgrade responsibilities.
 
 The repository should avoid unnecessary external dependencies while remaining productive.
-
----
 
 ## Decision
 
@@ -25,8 +21,6 @@ Every new dependency must satisfy the following criteria:
 
 Dependencies should be added only after evaluating existing solutions already present in the repository.
 
----
-
 ## Rationale
 
 Careful dependency management:
@@ -35,8 +29,6 @@ Careful dependency management:
 * lowers security risk;
 * simplifies upgrades;
 * minimizes transitive dependency growth.
-
----
 
 ## Consequences
 
@@ -51,8 +43,6 @@ Careful dependency management:
 
 * Introducing new libraries requires additional review.
 
----
-
 ## Alternatives Considered
 
 ### Unrestricted Dependency Adoption
@@ -60,8 +50,6 @@ Careful dependency management:
 Rejected.
 
 Uncontrolled dependency growth increases maintenance burden and architectural inconsistency.
-
----
 
 ## Review
 

@@ -2,34 +2,45 @@
   "$schema": "./node_modules/turbo/schema.json",
   "ui": "tui",
   "globalPassThroughEnv": ["BASE_URL", "VERCEL_AUTOMATION_BYPASS_SECRET", "CI"],
+
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**"]
     },
+
     "dev": {
       "cache": false,
       "persistent": true
     },
+
     "lint": {
       "dependsOn": ["^lint"],
       "outputs": []
     },
+
+    "lint:fix": {
+      "cache": false,
+      "outputs": []
+    },
+
+    "typecheck": {
+      "dependsOn": ["^typecheck", "@ci/config-vitest#build"],
+      "outputs": []
+    },
+
     "test": {
       "inputs": ["$TURBO_DEFAULT$", "vitest.config.ts"],
-      "dependsOn": ["transit", "@ci/config-vitest#build"]
+      "dependsOn": ["^test"],
+      "outputs": ["coverage/**"]
     },
+
     "test:watch": {
       "cache": false,
       "persistent": true
     },
-    "typecheck": {
-      "dependsOn": ["^typecheck", "@ci/config-vitest#build"]
-    },
-    "transit": {
-      "dependsOn": ["^transit"]
-    },
+
     "clean": {
       "cache": false
     }

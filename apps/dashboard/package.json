@@ -14,7 +14,7 @@
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:watch": "vitest --watch",
-    "clean": "rimraf dist .vite .turbo"
+    "clean": "rimraf dist .vite .turbo node_modules test-results"
   },
   "dependencies": {
     "react": "catalog:",

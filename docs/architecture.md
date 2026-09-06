@@ -390,23 +390,26 @@ They must never contain business logic.
 
 ## Build Architecture
 
-Applications are built using Vite.
+Internal packages do not automatically require a build step.
 
-Libraries are built using tsc.
+Packages are classified by their consumer:
 
-Type declarations are generated during library builds.
+- Vite-consumed application libraries use the JIT/source model.
+- Packages that must provide a standalone runtime artifact use a compiled build.
+- Tooling packages may use either model depending on how they are executed.
 
-Buildable libraries output:
+The current repository uses:
 
-```text
-dist/
-├── index.js
-├── index.js.map
-├── index.d.ts
-└── index.d.ts.map
-```
-
-Only the `dist/` directory is considered distributable. `config-env` currently exports TypeScript source directly and has no build script.
+| Package                 | Strategy    |
+| ----------------------- | ----------- |
+| `@ci/shared`            | JIT         |
+| `@ci/runtime`           | JIT         |
+| `@ci/commerce`          | JIT         |
+| `@ci/simulation`        | Compiled    |
+| `@ci/config-env`        | JIT         |
+| `@ci/config-typescript` | Config-only |
+| `@ci/config-vitest`     | Compiled    |
+| `dashboard`             | Vite build  |
 
 ## TypeScript Architecture
 

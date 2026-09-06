@@ -17,16 +17,18 @@ export class Runtime {
 
   private readonly queries = new QueryRegistry();
 
-  private readonly state = new RuntimeState();
+  private readonly state: RuntimeState;
 
   constructor(options: RuntimeOptions) {
     this._tenantId = options.tenantId;
+
+    this.state = new RuntimeState(options.tenantId);
   }
 
   registerProjection(projection: Projection<unknown>): void {
     this.projections.register(projection);
 
-    this.state.ensureProjection(projection, this.tenantId);
+    this.state.ensureProjection(projection);
   }
 
   registerQuery(query: Query<unknown, unknown>): void {
@@ -35,7 +37,7 @@ export class Runtime {
 
   ingest(events: readonly EventEnvelope[]): void {
     for (const event of events) {
-      if (event.tenantId !== this.tenantId) {
+      if (event.tenantId !== this._tenantId) {
         continue;
       }
 
@@ -47,7 +49,7 @@ export class Runtime {
     const query = this.queries.get(name) as Query<TInput, TResult>;
 
     return query.execute(this.snapshot(), input, {
-      tenantId: this.tenantId,
+      tenantId: this._tenantId,
     });
   }
 
@@ -56,6 +58,10 @@ export class Runtime {
   }
 
   restore(snapshot: RuntimeSnapshot): void {
+    if (!snapshot.tenantIds.includes(this._tenantId)) {
+      throw new Error(`Snapshot does not belong to tenant "${this._tenantId}".`);
+    }
+
     this.state.restore(snapshot);
   }
 

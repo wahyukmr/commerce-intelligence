@@ -3,15 +3,11 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Every contribution should be validated consistently before reaching the default branch.
 
 Validation should be reproducible locally and in continuous integration.
-
----
 
 ## Decision
 
@@ -27,8 +23,6 @@ Every pull request executes:
 
 The CI pipeline must use the same package manager, Node.js version, and repository scripts used by developers.
 
----
-
 ## Rationale
 
 A single validation pipeline:
@@ -37,8 +31,6 @@ A single validation pipeline:
 * prevents configuration drift;
 * ensures reproducible builds;
 * reduces deployment risk.
-
----
 
 ## Consequences
 
@@ -54,8 +46,6 @@ A single validation pipeline:
 * CI failures block merges.
 * Build time increases as the repository grows.
 
----
-
 ## Alternatives Considered
 
 ### Multiple Independent Workflows
@@ -64,15 +54,11 @@ Rejected.
 
 Multiple overlapping workflows increase maintenance complexity and reduce consistency.
 
----
-
 ### Manual Validation
 
 Rejected.
 
 Manual validation cannot guarantee consistent repository quality.
-
----
 
 ## Review
 

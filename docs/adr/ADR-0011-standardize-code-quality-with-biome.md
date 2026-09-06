@@ -3,15 +3,11 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 The repository requires consistent formatting, linting, and import organization.
 
 Maintaining separate tools for formatting and linting increases configuration complexity and maintenance effort.
-
----
 
 ## Decision
 
@@ -25,8 +21,6 @@ Biome configuration is centralized at the repository root.
 
 All workspaces follow the same rules.
 
----
-
 ## Rationale
 
 Biome provides:
@@ -36,8 +30,6 @@ Biome provides:
 * minimal configuration;
 * deterministic formatting;
 * consistent developer experience.
-
----
 
 ## Consequences
 
@@ -53,8 +45,6 @@ Biome provides:
 * Repository formatting follows Biome conventions.
 * Custom formatting preferences are intentionally limited.
 
----
-
 ## Alternatives Considered
 
 ### ESLint + Prettier
@@ -63,15 +53,11 @@ Rejected.
 
 Maintaining two independent tools increases complexity without providing sufficient benefits for this repository.
 
----
-
 ### ESLint Only
 
 Rejected.
 
 Formatting and linting remain separate concerns.
-
----
 
 ## Review
 

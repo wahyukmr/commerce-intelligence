@@ -15,13 +15,15 @@ export class RuntimeState {
 
   private readonly projectionStates = new Map<string, ProjectionState>();
 
-  ensureProjection(projection: Projection<unknown>, tenantId: string): void {
+  constructor(private readonly tenantId: string) {}
+
+  ensureProjection(projection: Projection<unknown>): void {
     if (this.projectionStates.has(projection.name)) {
       return;
     }
 
     const context: ProjectionContext = {
-      tenantId,
+      tenantId: this.tenantId,
       sequence: this.sequence,
     };
 
@@ -40,7 +42,7 @@ export class RuntimeState {
 
     for (const entry of this.projectionStates.values()) {
       const context: ProjectionContext = {
-        tenantId: event.tenantId,
+        tenantId: this.tenantId,
         sequence: this.sequence,
       };
 
@@ -86,7 +88,7 @@ export class RuntimeState {
       runtimeVersion: 1,
       sequence: this.sequence,
       eventCount: this.eventCount,
-      tenantIds: [],
+      tenantIds: [this.tenantId],
       processedEventIds: [...this.processedEventIds],
       projections,
     };
@@ -104,7 +106,7 @@ export class RuntimeState {
 
     for (const entry of this.projectionStates.values()) {
       entry.state = entry.projection.createInitialState({
-        tenantId: "",
+        tenantId: this.tenantId,
         sequence: 0,
       });
     }

@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Applications and libraries require a modern testing framework with strong TypeScript support and fast execution.
@@ -14,8 +12,6 @@ The repository also requires:
 * React support;
 * Node support;
 * workspace compatibility.
-
----
 
 ## Decision
 
@@ -29,8 +25,6 @@ Testing principles:
 
 Coverage thresholds are not currently configured in the repository.
 
----
-
 ## Rationale
 
 Vitest integrates naturally with:
@@ -41,8 +35,6 @@ Vitest integrates naturally with:
 * modern ESM workflows.
 
 It minimizes configuration while providing excellent developer experience.
-
----
 
 ## Consequences
 
@@ -57,8 +49,6 @@ It minimizes configuration while providing excellent developer experience.
 
 * Repository testing conventions become tied to Vitest APIs.
 
----
-
 ## Alternatives Considered
 
 ### Jest
@@ -66,8 +56,6 @@ It minimizes configuration while providing excellent developer experience.
 Rejected.
 
 Jest remains capable but requires additional configuration for modern ESM workflows and offers less alignment with the repository toolchain.
-
----
 
 ## Review
 

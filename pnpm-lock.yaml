@@ -208,6 +208,12 @@ catalogs:
     '@types/node':
       specifier: ^26.1.2
       version: 26.1.2
+    react:
+      specifier: ^19.2.8
+      version: 19.2.8
+    react-dom:
+      specifier: ^19.2.8
+      version: 19.2.8
     typescript:
       specifier: ^7.0.2
       version: 7.0.2
@@ -304,6 +310,9 @@ importers:
       '@ci/config-vitest':
         specifier: workspace:*
         version: link:../config-vitest
+      '@ci/runtime':
+        specifier: workspace:*
+        version: link:../runtime
 
   packages/config-env:
     dependencies:
