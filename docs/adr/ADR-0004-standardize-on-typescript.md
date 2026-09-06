@@ -3,15 +3,11 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Every application and package requires static type checking.
 
 Duplicating compiler configuration across projects increases maintenance cost and configuration drift.
-
----
 
 ## Decision
 
@@ -30,8 +26,6 @@ Available configurations include:
 
 Every project extends one shared configuration.
 
----
-
 ## Rationale
 
 Centralized configuration provides:
@@ -40,8 +34,6 @@ Centralized configuration provides:
 * easier upgrades;
 * simpler maintenance;
 * predictable developer experience.
-
----
 
 ## Consequences
 
@@ -56,8 +48,6 @@ Centralized configuration provides:
 
 Projects requiring special compiler behavior must justify and document those exceptions.
 
----
-
 ## Alternatives Considered
 
 ### Per-package Configuration
@@ -65,8 +55,6 @@ Projects requiring special compiler behavior must justify and document those exc
 Rejected.
 
 Configuration duplication becomes increasingly difficult to maintain.
-
----
 
 ## Review
 

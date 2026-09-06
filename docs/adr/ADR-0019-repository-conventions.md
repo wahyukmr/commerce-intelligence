@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 A growing repository with multiple contributors requires consistent engineering conventions.
@@ -15,8 +13,6 @@ Without shared conventions:
 * project structure becomes inconsistent;
 * onboarding becomes slower;
 * reviews focus on style instead of design.
-
----
 
 ## Decision
 
@@ -34,8 +30,6 @@ The repository standardizes conventions covering:
 
 These conventions are documented in `docs/conventions.md`.
 
----
-
 ## Rationale
 
 Shared conventions:
@@ -44,8 +38,6 @@ Shared conventions:
 * reduce review overhead;
 * simplify onboarding;
 * create a consistent developer experience.
-
----
 
 ## Consequences
 
@@ -60,8 +52,6 @@ Shared conventions:
 
 * Contributors should learn repository conventions before introducing new patterns.
 
----
-
 ## Alternatives Considered
 
 ### Team-Specific Conventions
@@ -70,15 +60,11 @@ Rejected.
 
 Different conventions across packages reduce consistency and increase cognitive load.
 
----
-
 ### Convention by Individual Preference
 
 Rejected.
 
 Personal preferences do not scale in a shared engineering platform.
-
----
 
 ## Review
 

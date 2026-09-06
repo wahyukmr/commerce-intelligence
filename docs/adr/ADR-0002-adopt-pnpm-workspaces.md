@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 A monorepo requires a workspace-aware package manager capable of:
@@ -13,8 +11,6 @@ A monorepo requires a workspace-aware package manager capable of:
 * deterministic installs;
 * efficient disk usage;
 * lockfile consistency.
-
----
 
 ## Decision
 
@@ -25,8 +21,6 @@ All internal packages reference one another using:
 ```json
 "workspace:*"
 ```
-
----
 
 ## Rationale
 
@@ -39,8 +33,6 @@ pnpm provides:
 * deterministic lockfiles.
 
 These characteristics align with the repository goals.
-
----
 
 ## Consequences
 
@@ -57,8 +49,6 @@ Developers must use pnpm.
 
 Other package managers are unsupported.
 
----
-
 ## Alternatives Considered
 
 ### npm Workspaces
@@ -69,7 +59,6 @@ Rejected due to weaker workspace ergonomics and slower installations.
 
 Rejected to reduce ecosystem complexity and because pnpm better matches repository requirements.
 
----
 
 ## Review
 

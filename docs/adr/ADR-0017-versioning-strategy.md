@@ -4,7 +4,6 @@
 * **Date:** 2026-08-17
 * **Superseded by:** ADR-0022
 
----
 ## Supersession
 
 This decision has been superseded by [ADR-0022 — Adopt Application-Level Release Boundaries](./ADR-0022-application-level-release-boundaries.md).
@@ -15,8 +14,6 @@ After evaluating the actual release model of the repository, the internal packag
 
 ADR-0022 therefore replaces Changesets-based package versioning with an application-level release model.
 
----
-
 ## Context
 
 The repository contains reusable packages but does not publish them externally.
@@ -24,8 +21,6 @@ The repository contains reusable packages but does not publish them externally.
 Internal consumers should always reference the current workspace version.
 
 Repository history should clearly describe user-visible changes.
-
----
 
 ## Decision
 
@@ -37,8 +32,6 @@ The repository adopts:
 
 Package versions are maintained in each package manifest; internal dependency links use the workspace protocol.
 
----
-
 ## Rationale
 
 This strategy:
@@ -46,8 +39,6 @@ This strategy:
 * simplifies dependency management;
 * preserves release history;
 * supports future package publication if required.
-
----
 
 ## Consequences
 
@@ -61,8 +52,6 @@ This strategy:
 
 * Contributors must understand Changesets when modifying public APIs.
 
----
-
 ## Alternatives Considered
 
 ### Manual Version Management
@@ -71,15 +60,11 @@ Rejected.
 
 Manual versioning is error-prone and difficult to scale.
 
----
-
 ### Independent Internal Versions Without Changesets
 
 Rejected.
 
 Repository history becomes harder to understand and automate.
-
----
 
 ## Review
 

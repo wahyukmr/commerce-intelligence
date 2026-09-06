@@ -3,15 +3,11 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Supporting both CommonJS and ECMAScript Modules increases build complexity, testing effort, and configuration overhead.
 
 All consumers of this repository are internal and run on modern JavaScript runtimes.
-
----
 
 ## Decision
 
@@ -26,15 +22,11 @@ Repository rules:
 
 Libraries produce only ESM artifacts.
 
----
-
 ## Rationale
 
 Modern tooling, Node.js, and browsers all support ESM natively.
 
 Supporting CommonJS would increase maintenance cost without providing meaningful value for this repository.
-
----
 
 ## Consequences
 
@@ -51,8 +43,6 @@ Legacy CommonJS consumers are unsupported.
 
 This limitation is acceptable because the repository is internal.
 
----
-
 ## Alternatives Considered
 
 ### Dual Package (ESM + CommonJS)
@@ -65,8 +55,6 @@ Reasons:
 * additional testing;
 * more complex exports;
 * unnecessary maintenance burden.
-
----
 
 ## Review
 

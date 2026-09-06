@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 The dashboard is a web application that needs frequent, reliable, low-friction deployment updates while preserving production quality.
@@ -17,8 +15,6 @@ Without a managed deployment flow:
 * deployment regressions are harder to isolate after the fact.
 
 The repository already uses GitHub Actions for CI, and the application is hosted on Vercel. A deployment workflow should therefore align with the existing engineering platform rather than creating a separate release mechanism.
-
----
 
 ## Decision
 
@@ -33,8 +29,6 @@ The deployment model is:
 
 The implementation lives in `.github/workflows/e2e.yml`.
 
----
-
 ## Rationale
 
 Using Vercel with a deployment-triggered verification step provides:
@@ -45,8 +39,6 @@ Using Vercel with a deployment-triggered verification step provides:
 * release visibility for both GitHub and Vercel stakeholders.
 
 This approach reduces the risk of shipping a broken build by validating the runtime URL rather than only verifying source code in CI. It also preserves a clear feedback loop from deployment readiness to validation status.
-
----
 
 ## Consequences
 
@@ -63,8 +55,6 @@ This approach reduces the risk of shipping a broken build by validating the runt
 * E2E runs depend on the runtime environment being reachable and stable.
 * The workflow requires environment secrets and deployment metadata to be configured correctly.
 
----
-
 ## Alternatives Considered
 
 ### Manual Deployment Checks
@@ -78,8 +68,6 @@ Manual verification is slower, harder to repeat, and more error-prone. It also d
 Rejected.
 
 A CI-only gate does not validate the deployed artifact itself. It can miss runtime issues caused by infrastructure, environment configuration, or deployment specifics.
-
----
 
 ## Review
 

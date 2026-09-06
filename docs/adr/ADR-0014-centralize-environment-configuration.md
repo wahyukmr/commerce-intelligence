@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Environment variables are shared across multiple applications and packages.
@@ -16,8 +14,6 @@ Direct access to `process.env` or `import.meta.env` throughout the repository cr
 * runtime failures;
 * security risks.
 
----
-
 ## Decision
 
 Centralize environment management in `@ci/config-env`.
@@ -25,8 +21,6 @@ Centralize environment management in `@ci/config-env`.
 All environment variables are validated during application startup.
 
 Applications consume typed environment objects rather than raw environment variables.
-
----
 
 ## Rationale
 
@@ -37,8 +31,6 @@ Centralization provides:
 * consistent access patterns;
 * improved security;
 * simplified maintenance.
-
----
 
 ## Consequences
 
@@ -53,8 +45,6 @@ Centralization provides:
 
 * New environment variables must be added to the shared schema before use.
 
----
-
 ## Alternatives Considered
 
 ### Direct Environment Access
@@ -63,15 +53,11 @@ Rejected.
 
 Direct access leads to duplicated validation and inconsistent behavior across packages.
 
----
-
 ### Per-Application Environment Management
 
 Rejected.
 
 Environment handling is a cross-cutting concern and should remain centralized.
-
----
 
 ## Review
 

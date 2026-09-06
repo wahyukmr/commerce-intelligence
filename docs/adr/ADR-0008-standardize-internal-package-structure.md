@@ -3,15 +3,11 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Different folder layouts across packages increase cognitive load and reduce developer productivity.
 
 A predictable package structure improves navigation and onboarding.
-
----
 
 ## Decision
 
@@ -31,8 +27,6 @@ src/
 
 Implementation is organized by feature rather than by file type.
 
----
-
 ## Rationale
 
 Standardization:
@@ -41,8 +35,6 @@ Standardization:
 * reduces onboarding time;
 * simplifies tooling;
 * reduces maintenance overhead.
-
----
 
 ## Consequences
 
@@ -56,8 +48,6 @@ Standardization:
 
 * Exceptional package layouts require explicit justification.
 
----
-
 ## Alternatives Considered
 
 ### Package-specific Layouts
@@ -65,8 +55,6 @@ Standardization:
 Rejected.
 
 Different layouts introduce unnecessary complexity.
-
----
 
 ## Review
 

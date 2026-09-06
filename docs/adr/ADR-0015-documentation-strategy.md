@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 As the repository grows, architectural knowledge becomes increasingly difficult to preserve through source code alone.
@@ -17,8 +15,6 @@ Without consistent documentation:
 * implementation diverges from intended design.
 
 Documentation should be treated as part of the engineering system rather than an afterthought.
-
----
 
 ## Decision
 
@@ -35,8 +31,6 @@ Documentation is organized into the following categories:
 
 Every architectural change should update the relevant documentation.
 
----
-
 ## Rationale
 
 Well-maintained documentation:
@@ -45,8 +39,6 @@ Well-maintained documentation:
 * preserves architectural knowledge;
 * reduces repeated discussions;
 * provides long-term maintainability.
-
----
 
 ## Consequences
 
@@ -62,8 +54,6 @@ Well-maintained documentation:
 * Documentation requires continuous maintenance.
 * Pull requests may require documentation updates in addition to code changes.
 
----
-
 ## Alternatives Considered
 
 ### Code Only
@@ -72,15 +62,11 @@ Rejected.
 
 Source code explains implementation, not architectural reasoning or repository conventions.
 
----
-
 ### Wiki-Based Documentation
 
 Rejected.
 
 Keeping documentation inside the repository ensures it evolves together with the implementation.
-
----
 
 ## Review
 

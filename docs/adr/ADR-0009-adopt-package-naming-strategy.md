@@ -3,15 +3,11 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Consistent package naming improves discoverability and communicates package ownership.
 
 Inconsistent naming often leads to ambiguous responsibilities.
-
----
 
 ## Decision
 
@@ -37,8 +33,6 @@ Examples:
 
 Package names should describe responsibility rather than implementation.
 
----
-
 ## Rationale
 
 Consistent naming:
@@ -46,8 +40,6 @@ Consistent naming:
 * improves readability;
 * simplifies imports;
 * strengthens package identity.
-
----
 
 ## Consequences
 
@@ -61,8 +53,6 @@ Consistent naming:
 
 * Package renaming becomes an architectural change.
 
----
-
 ## Alternatives Considered
 
 ### Unscoped Package Names
@@ -70,8 +60,6 @@ Consistent naming:
 Rejected.
 
 Scoped packages clearly distinguish internal packages from external dependencies.
-
----
 
 ## Review
 

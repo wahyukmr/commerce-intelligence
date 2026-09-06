@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 Commerce Intelligence is expected to evolve into a platform consisting of multiple applications, reusable libraries, shared tooling, and engineering documentation.
@@ -19,8 +17,6 @@ The repository must support:
 * scalable dependency management.
 
 Maintaining independent repositories would introduce duplicated tooling, duplicated CI/CD pipelines, inconsistent dependency versions, fragmented documentation, and more expensive cross-project refactoring.
-
----
 
 ## Decision
 
@@ -42,8 +38,6 @@ apps/<app>/e2e/
 
 Applications consume internal packages through workspace dependencies.
 
----
-
 ## Rationale
 
 A monorepo provides:
@@ -55,8 +49,6 @@ A monorepo provides:
 * one engineering standard.
 
 Because every package is internal, independent versioning provides little value.
-
----
 
 ## Consequences
 
@@ -74,8 +66,6 @@ Because every package is internal, independent versioning provides little value.
 * Architectural discipline becomes critical.
 * Poor package boundaries affect the entire repository.
 
----
-
 ## Alternatives Considered
 
 ### Multiple Repositories
@@ -89,8 +79,6 @@ Reasons:
 * version synchronization;
 * fragmented documentation;
 * slower development.
-
----
 
 ## Review
 

@@ -3,8 +3,6 @@
 * **Status:** Accepted
 * **Date:** 2026-08-17
 
----
-
 ## Context
 
 As the repository grows, different packages will represent different responsibilities such as infrastructure, business logic, simulations, and applications.
@@ -17,8 +15,6 @@ The repository requires a structure that:
 * encourages reuse;
 * minimizes coupling;
 * supports long-term scalability.
-
----
 
 ## Decision
 
@@ -44,8 +40,6 @@ Dependencies always flow downward.
 
 Lower layers must never depend on higher layers.
 
----
-
 ## Rationale
 
 A layered architecture provides:
@@ -57,8 +51,6 @@ A layered architecture provides:
 * better package reuse.
 
 Each layer has one primary responsibility.
-
----
 
 ## Consequences
 
@@ -74,8 +66,6 @@ Each layer has one primary responsibility.
 * Some features require additional planning before implementation.
 * Layer violations require architectural review.
 
----
-
 ## Alternatives Considered
 
 ### Flat Package Structure
@@ -83,8 +73,6 @@ Each layer has one primary responsibility.
 Rejected.
 
 A flat dependency graph becomes increasingly difficult to maintain as the repository grows.
-
----
 
 ## Review
 
