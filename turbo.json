@@ -25,7 +25,7 @@
     },
 
     "typecheck": {
-      "dependsOn": ["^typecheck"],
+      "dependsOn": ["^typecheck", "@ci/config-vitest#build"],
       "outputs": []
     },
 
