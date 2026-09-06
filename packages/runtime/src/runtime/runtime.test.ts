@@ -25,14 +25,10 @@ const testProjection: Projection<TestState> = {
 
   serialize: (state) => state,
 
-  deserialize: (snapshot) =>
-    snapshot as TestState,
+  deserialize: (snapshot) => snapshot as TestState,
 };
 
-const createEvent = (
-  id: string,
-  type = "TestEvent",
-): EventEnvelope => ({
+const createEvent = (id: string, type = "TestEvent"): EventEnvelope => ({
   id,
   type,
   version: 1,
@@ -49,9 +45,7 @@ describe("Runtime", () => {
 
     runtime.registerProjection(testProjection);
 
-    expect(runtime.projectionNames).toEqual([
-      "test",
-    ]);
+    expect(runtime.projectionNames).toEqual(["test"]);
   });
 
   it("rejects duplicate projection registration", () => {
@@ -61,9 +55,7 @@ describe("Runtime", () => {
 
     runtime.registerProjection(testProjection);
 
-    expect(() =>
-      runtime.registerProjection(testProjection),
-    ).toThrow(DuplicateRegistrationError);
+    expect(() => runtime.registerProjection(testProjection)).toThrow(DuplicateRegistrationError);
   });
 
   it("ingests events incrementally", () => {
@@ -73,15 +65,9 @@ describe("Runtime", () => {
 
     runtime.registerProjection(testProjection);
 
-    runtime.ingest([
-      createEvent("event-1"),
-      createEvent("event-2", "AnotherEvent"),
-    ]);
+    runtime.ingest([createEvent("event-1"), createEvent("event-2", "AnotherEvent")]);
 
-    const state =
-      runtime.getProjectionState<TestState>(
-        "test",
-      );
+    const state = runtime.getProjectionState<TestState>("test");
 
     expect(state).toEqual({
       count: 2,
@@ -104,10 +90,7 @@ describe("Runtime", () => {
     runtime.ingest([event]);
     runtime.ingest([event]);
 
-    const state =
-      runtime.getProjectionState<TestState>(
-        "test",
-      );
+    const state = runtime.getProjectionState<TestState>("test");
 
     expect(state.count).toBe(1);
     expect(runtime.eventCount).toBe(1);
@@ -128,10 +111,7 @@ describe("Runtime", () => {
       },
     ]);
 
-    const state =
-      runtime.getProjectionState<TestState>(
-        "test",
-      );
+    const state = runtime.getProjectionState<TestState>("test");
 
     expect(state.count).toBe(1);
     expect(runtime.eventCount).toBe(1);
@@ -144,26 +124,17 @@ describe("Runtime", () => {
 
     runtime.registerProjection(testProjection);
 
-    runtime.ingest([
-      createEvent("event-1"),
-      createEvent("event-2"),
-    ]);
+    runtime.ingest([createEvent("event-1"), createEvent("event-2")]);
 
-    const query: Query<
-      undefined,
-      number
-    > = {
+    const query: Query<undefined, number> = {
       name: "event-count",
 
-      execute: (snapshot) =>
-        snapshot.eventCount,
+      execute: (snapshot) => snapshot.eventCount,
     };
 
     runtime.registerQuery(query);
 
-    expect(
-      runtime.query("event-count", undefined),
-    ).toBe(2);
+    expect(runtime.query("event-count", undefined)).toBe(2);
   });
 
   it("creates and restores snapshots", () => {
@@ -171,36 +142,24 @@ describe("Runtime", () => {
       tenantId: "tenant-1",
     });
 
-    firstRuntime.registerProjection(
-      testProjection,
-    );
+    firstRuntime.registerProjection(testProjection);
 
-    firstRuntime.ingest([
-      createEvent("event-1"),
-      createEvent("event-2"),
-    ]);
+    firstRuntime.ingest([createEvent("event-1"), createEvent("event-2")]);
 
-    const snapshot =
-      firstRuntime.snapshot();
+    const snapshot = firstRuntime.snapshot();
 
     const secondRuntime = new Runtime({
       tenantId: "tenant-1",
     });
 
-    secondRuntime.registerProjection(
-      testProjection,
-    );
+    secondRuntime.registerProjection(testProjection);
 
     secondRuntime.restore(snapshot);
 
     expect(secondRuntime.eventCount).toBe(2);
     expect(secondRuntime.sequence).toBe(2);
 
-    expect(
-      secondRuntime.getProjectionState<TestState>(
-        "test",
-      ),
-    ).toEqual({
+    expect(secondRuntime.getProjectionState<TestState>("test")).toEqual({
       count: 2,
       lastEventType: "TestEvent",
     });
@@ -213,22 +172,64 @@ describe("Runtime", () => {
 
     runtime.registerProjection(testProjection);
 
-    runtime.ingest([
-      createEvent("event-1"),
-    ]);
+    runtime.ingest([createEvent("event-1")]);
 
     runtime.reset();
 
     expect(runtime.eventCount).toBe(0);
     expect(runtime.sequence).toBe(0);
 
-    expect(
-      runtime.getProjectionState<TestState>(
-        "test",
-      ),
-    ).toEqual({
+    expect(runtime.getProjectionState<TestState>("test")).toEqual({
       count: 0,
       lastEventType: null,
     });
+  });
+
+  it("includes the runtime tenant in snapshots", () => {
+    const runtime = new Runtime({
+      tenantId: "tenant-1",
+    });
+
+    expect(runtime.snapshot().tenantIds).toEqual(["tenant-1"]);
+  });
+
+  it("preserves tenant context after reset", () => {
+    const runtime = new Runtime({
+      tenantId: "tenant-1",
+    });
+
+    runtime.registerProjection(testProjection);
+
+    runtime.ingest([createEvent("event-1")]);
+
+    runtime.reset();
+
+    runtime.ingest([createEvent("event-2")]);
+
+    expect(runtime.getProjectionState<TestState>("test")).toEqual({
+      count: 1,
+      lastEventType: "TestEvent",
+    });
+
+    expect(runtime.snapshot().tenantIds).toEqual(["tenant-1"]);
+  });
+
+  it("rejects restoring a snapshot from another tenant", () => {
+    const runtime = new Runtime({
+      tenantId: "tenant-1",
+    });
+
+    const snapshot = {
+      runtimeVersion: 1 as const,
+      sequence: 0,
+      eventCount: 0,
+      tenantIds: ["tenant-2"],
+      processedEventIds: [],
+      projections: [],
+    };
+
+    expect(() => runtime.restore(snapshot)).toThrow(
+      'Snapshot does not belong to tenant "tenant-1".',
+    );
   });
 });
