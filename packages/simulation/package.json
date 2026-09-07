@@ -23,6 +23,8 @@
   },
   "devDependencies": {
     "@ci/config-typescript": "workspace:*",
-    "@ci/config-vitest": "workspace:*"
+    "@ci/config-vitest": "workspace:*",
+    "@ci/commerce": "workspace:*",
+    "@ci/runtime": "workspace:*"
   }
 }

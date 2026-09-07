@@ -365,12 +365,18 @@ importers:
 
   packages/simulation:
     devDependencies:
+      '@ci/commerce':
+        specifier: workspace:*
+        version: link:../commerce
       '@ci/config-typescript':
         specifier: workspace:*
         version: link:../config-typescript
       '@ci/config-vitest':
         specifier: workspace:*
         version: link:../config-vitest
+      '@ci/runtime':
+        specifier: workspace:*
+        version: link:../runtime
 
 packages:
 
