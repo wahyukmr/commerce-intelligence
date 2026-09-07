@@ -4,7 +4,7 @@ import type { SimulationScenario } from "../config/simulation-scenario";
 import type { SimulationWorkerResponse } from "./simulation-worker-protocol";
 import { SimulationWorkerRunner } from "./simulation-worker-runner";
 
-const config: SimulationConfig = {
+const config = {
   tenantId: "worker-test",
   seed: 7,
   totalUsers: 20,
@@ -22,9 +22,9 @@ const config: SimulationConfig = {
     power: 0.15,
   },
   chunkSize: 5,
-};
+} satisfies SimulationConfig;
 
-const scenario: SimulationScenario = {
+const scenario = {
   name: "worker-test",
   scale: {
     name: "small" as const,
@@ -53,7 +53,7 @@ const scenario: SimulationScenario = {
     refundProbability: 0,
     refundPartialProbability: 0,
   },
-};
+} satisfies SimulationScenario;
 
 describe("SimulationWorkerRunner", () => {
   it("streams progress, chunks, and completion", async () => {
