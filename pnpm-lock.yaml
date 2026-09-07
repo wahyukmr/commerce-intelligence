@@ -283,6 +283,9 @@ importers:
       '@ci/config-vitest':
         specifier: workspace:*
         version: link:../../packages/config-vitest
+      '@ci/simulation':
+        specifier: workspace:*
+        version: link:../../packages/simulation
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2

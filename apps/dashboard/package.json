@@ -24,6 +24,7 @@
     "@ci/config-typescript": "workspace:*",
     "@ci/config-vitest": "workspace:*",
     "@ci/config-env": "workspace:*",
+    "@ci/simulation": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",

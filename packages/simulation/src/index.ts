@@ -9,3 +9,4 @@ export * from "./generator/simulation-id-factory";
 export * from "./random/seeded-random";
 export * from "./runner/simulation-runner";
 export * from "./timeline/timeline";
+export * from "./worker";
