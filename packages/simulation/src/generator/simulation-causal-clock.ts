@@ -16,7 +16,7 @@ export interface SessionEventClock {
 }
 
 export class SimulationCausalClock {
-  public constructor(
+  constructor(
     private readonly timeline: Timeline,
     private readonly random: SeededRandom,
   ) {}

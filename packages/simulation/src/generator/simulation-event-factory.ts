@@ -13,7 +13,11 @@ import type {
 import type { EventEnvelope } from "@ci/runtime";
 
 export class SimulationEventFactory {
-  public constructor(private readonly tenantId: string) {}
+  private readonly tenantId: string;
+
+  constructor(tenantId: string) {
+    this.tenantId = tenantId;
+  }
 
   public customerRegistered(
     id: string,

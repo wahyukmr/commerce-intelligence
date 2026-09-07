@@ -21,7 +21,7 @@ export interface SimulationRunOptions {
 export class SimulationRunner {
   private readonly generator: SimulationGenerator;
 
-  public constructor(
+  constructor(
     private readonly runtime: Runtime,
     config: SimulationConfig,
     scenario: SimulationScenario,

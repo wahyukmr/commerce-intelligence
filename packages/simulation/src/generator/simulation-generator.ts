@@ -35,7 +35,7 @@ export class SimulationGenerator {
   private readonly events: SimulationEventFactory;
   private readonly clock: SimulationCausalClock;
 
-  public constructor(
+  constructor(
     private readonly config: SimulationConfig,
     private readonly scenario: SimulationScenario,
   ) {

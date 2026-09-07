@@ -11,8 +11,11 @@ export interface SimulationWorkerTransport {
 export class SimulationWorkerRunner {
   private activeRequestId: string | null = null;
   private cancelledRequests = new Set<string>();
+  private readonly transport: SimulationWorkerTransport;
 
-  public constructor(private readonly transport: SimulationWorkerTransport) {}
+  constructor(transport: SimulationWorkerTransport) {
+    this.transport = transport;
+  }
 
   public async handle(request: SimulationWorkerRequest): Promise<void> {
     if (request.type === "simulation.cancel") {

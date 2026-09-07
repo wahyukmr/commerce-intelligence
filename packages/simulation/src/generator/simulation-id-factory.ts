@@ -1,7 +1,10 @@
 export class SimulationIdFactory {
   private sequence = 0;
+  private readonly prefix: string;
 
-  constructor(private readonly prefix: string) {}
+  constructor(prefix: string) {
+    this.prefix = prefix;
+  }
 
   next(): string {
     this.sequence += 1;
