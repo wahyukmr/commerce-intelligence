@@ -283,6 +283,9 @@ importers:
       '@ci/config-vitest':
         specifier: workspace:*
         version: link:../../packages/config-vitest
+      '@ci/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
       '@ci/simulation':
         specifier: workspace:*
         version: link:../../packages/simulation
