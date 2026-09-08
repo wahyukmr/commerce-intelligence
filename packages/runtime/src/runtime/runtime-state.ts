@@ -15,7 +15,11 @@ export class RuntimeState {
 
   private readonly projectionStates = new Map<string, ProjectionState>();
 
-  constructor(private readonly tenantId: string) {}
+  private readonly tenantId: string;
+
+  constructor(tenantId: string) {
+    this.tenantId = tenantId;
+  }
 
   ensureProjection(projection: Projection<unknown>): void {
     if (this.projectionStates.has(projection.name)) {
