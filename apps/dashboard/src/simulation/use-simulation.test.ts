@@ -1,9 +1,6 @@
-import { createCommerceQueryComposition } from "@ci/commerce";
-
-import { Runtime } from "@ci/runtime";
 import { describe, expect, it, vi } from "vitest";
+
 import { createDashboardComposition } from "../runtime/create-dashboard-composition";
-import { CommerceDashboardQueryService } from "../services/dashboard-query-service";
 import { useSimulation } from "./use-simulation";
 
 describe("useSimulation", () => {
@@ -11,14 +8,23 @@ describe("useSimulation", () => {
     expect(useSimulation).toEqual(expect.any(Function));
   });
 
-  it("uses the dashboard composition as its resource factory", () => {
-    const createComposition = vi.fn(() => createDashboardComposition({ tenantId: "test" }));
+  it("accepts an application-owned composition", () => {
+    const composition = createDashboardComposition({ tenantId: "test" });
+    const options = {
+      createWorker: vi.fn(),
+      composition,
+    };
 
-    const composition = createComposition();
+    expect(options.composition).toBe(composition);
+  });
 
-    expect(createComposition).toHaveBeenCalledTimes(1);
-    expect(composition.runtime).toBeInstanceOf(Runtime);
-    expect(composition.queryComposition).toEqual(createCommerceQueryComposition());
-    expect(composition.queryService).toBeInstanceOf(CommerceDashboardQueryService);
+  it("does not define a composition factory in its public options", () => {
+    const composition = createDashboardComposition({ tenantId: "test" });
+    const options = {
+      createWorker: vi.fn(),
+      composition,
+    };
+
+    expect("createComposition" in options).toBe(false);
   });
 });
