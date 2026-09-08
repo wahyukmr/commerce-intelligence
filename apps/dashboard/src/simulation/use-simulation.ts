@@ -7,6 +7,7 @@ import type {
   SimulationScenario,
 } from "@ci/simulation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { DashboardComposition } from "../runtime";
 import {
   INITIAL_SIMULATION_CONTROLLER_STATE,
   reduceSimulationControllerState,
@@ -19,7 +20,7 @@ import {
 
 export interface UseSimulationOptions {
   createWorker: ConstructorParameters<typeof SimulationWorkerClient>[0]["createWorker"];
-  createRuntime: () => Runtime;
+  createComposition: () => DashboardComposition;
 }
 
 export interface SimulationControllerHandlers {
@@ -41,7 +42,7 @@ export function useSimulation(
   handlers: SimulationControllerHandlers = {},
 ): UseSimulationResult {
   const workerRef = useRef<SimulationWorkerClient | null>(null);
-  const runtimeRef = useRef<Runtime | null>(null);
+  const conpositionRef = useRef<DashboardComposition | null>(null);
   const handlersRef = useRef(handlers);
 
   const [state, setState] = useState<SimulationControllerState>(
@@ -56,8 +57,8 @@ export function useSimulation(
     });
   }
 
-  if (runtimeRef.current === null) {
-    runtimeRef.current = options.createRuntime();
+  if (conpositionRef.current === null) {
+    conpositionRef.current = options.createComposition();
   }
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export function useSimulation(
     return worker.subscribe((workerState) => {
       setState((current) => ({
         ...reduceSimulationControllerState(current, workerState),
-        runtime: runtimeRef.current,
+        runtime: conpositionRef.current?.runtime ?? null,
       }));
     });
   }, []);
@@ -80,14 +81,14 @@ export function useSimulation(
   }, []);
 
   const start = useCallback((config: SimulationConfig, scenario: SimulationScenario) => {
-    const runtime = runtimeRef.current;
+    const composition = conpositionRef.current;
     const worker = workerRef.current;
 
-    if (!runtime || !worker) {
+    if (!composition || !worker) {
       throw new Error("Simulation resources are not initialized.");
     }
 
-    runtime.reset();
+    composition.runtime.reset();
     setState(INITIAL_SIMULATION_CONTROLLER_STATE);
 
     const workerHandlers: SimulationWorkerClientHandlers = {
@@ -95,12 +96,12 @@ export function useSimulation(
         handlersRef.current.onProgress?.(progress);
       },
       onChunk: (chunk) => {
-        runtime.ingest(chunk.events);
+        composition.runtime.ingest(chunk.events);
         handlersRef.current.onChunk?.(chunk);
 
         setState((current) => ({
           ...current,
-          runtimeEventCount: runtime.eventCount,
+          runtimeEventCount: composition.runtime.eventCount,
         }));
       },
     };
@@ -114,26 +115,26 @@ export function useSimulation(
 
   const reset = useCallback(() => {
     workerRef.current?.reset();
-    runtimeRef.current?.reset();
+    conpositionRef.current?.runtime.reset();
     setState(INITIAL_SIMULATION_CONTROLLER_STATE);
   }, []);
 
   const query = useCallback(<TResult = unknown, TInput = unknown>(name: string, input: TInput) => {
-    const runtime = runtimeRef.current;
-    if (!runtime) {
-      throw new Error("Simulation runtime is not initialized.");
+    const composition = conpositionRef.current;
+    if (!composition) {
+      throw new Error("Simulation dashboard composition is not initialized.");
     }
 
-    return runtime.query(name, input) as TResult;
+    return composition.queryService.execute<TInput, TResult>(name, input);
   }, []);
 
   const snapshot = useCallback(() => {
-    const runtime = runtimeRef.current;
-    if (!runtime) {
-      throw new Error("Simulation runtime is not initialized.");
+    const composition = conpositionRef.current;
+    if (!composition) {
+      throw new Error("Simulation dashboard composition is not initialized.");
     }
 
-    return runtime.snapshot();
+    return composition.runtime.snapshot();
   }, []);
 
   return {
