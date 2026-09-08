@@ -7,7 +7,7 @@ import type { CommerceEvent } from "../events/commerce-event.js";
 import { COMMERCE_EVENT_TYPES } from "../events/event-types.js";
 
 export class CustomerAnalyticsProjection implements Projection<CustomerAnalyticsProjectionState> {
-  readonly name = "commerce.customer-analytics";
+  readonly name = "commerce.customer.analytics";
 
   createInitialState(_context: ProjectionContext): CustomerAnalyticsProjectionState {
     return {

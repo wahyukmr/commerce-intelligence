@@ -16,7 +16,7 @@ type SessionEvent =
   | EventEnvelope<"checkout.started", CheckoutStartedPayload>;
 
 export class SessionBehaviorProjection implements Projection<SessionBehaviorProjectionState> {
-  readonly name = "commerce.session-behavior";
+  readonly name = "commerce.session.analytics";
 
   createInitialState(_context: ProjectionContext): SessionBehaviorProjectionState {
     return {
