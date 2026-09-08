@@ -1,3 +1,4 @@
+export * from "./compositions/index.js";
 export type {
   Customer,
   CustomerProjectionState,
@@ -58,7 +59,6 @@ export { CustomerAnalyticsProjection } from "./projections/customer-analytics-pr
 export { CustomerProjection } from "./projections/customer-projection.js";
 export { FunnelProjection } from "./projections/funnel-projection.js";
 export { OrderProjection } from "./projections/order-projection.js";
-
 export { ProductAnalyticsProjection } from "./projections/product-analytics-projection.js";
 export { RetentionProjection } from "./projections/retention-projection.js";
 export { RevenueProjection } from "./projections/revenue-projection.js";
@@ -83,14 +83,12 @@ export {
   FunnelSessionQuery,
   FunnelSummaryQuery,
 } from "./queries/funnel.js";
-
 export type {
   ProductAnalyticsQueryInput,
   ProductAnalyticsQueryResult,
   ProductAnalyticsSummary,
   TopProductsQueryInput,
 } from "./queries/product-analytics.js";
-
 export {
   ProductAnalyticsQuery,
   ProductAnalyticsSummaryQuery,
@@ -121,9 +119,7 @@ export {
   SessionAnalyticsQuery,
   SessionAnalyticsSummaryQuery,
 } from "./queries/session-analytics.js";
-
 export type { CommerceEventValidationResult } from "./validation/commerce-event-validation.js";
-
 export {
   assertValidCommerceEvent,
   CommerceEventValidationError,
