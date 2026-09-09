@@ -7,8 +7,6 @@
 
 ## Context
 
-M3 established the commerce event model, projections, and queries. M4 connected synthetic events to the runtime and dashboard through worker-based simulation.
-
 The dashboard composition still required each consumer to manually construct commerce projections. That creates unnecessary duplication and makes it possible for different consumers to expose different projection sets accidentally.
 
 The system needs one canonical composition root for commerce projections while keeping read-side query composition flexible.

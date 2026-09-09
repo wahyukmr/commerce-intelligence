@@ -39,10 +39,6 @@ Rejected because query implementation ownership belongs to the query layer, not 
 
 Rejected because application-level dependency selection belongs to the application composition root. The commerce package should remain reusable by multiple consumers.
 
-### Create a second runtime or read-service abstraction
-
-Rejected because M4.7 and M4.9 already provide the required runtime and query read boundaries.
-
 ## Consequences
 
 The dashboard has one canonical composition path.

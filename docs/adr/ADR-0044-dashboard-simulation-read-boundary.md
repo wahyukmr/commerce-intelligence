@@ -23,10 +23,6 @@ The controller does not construct query implementations or perform commerce calc
 
 ## Alternatives Considered
 
-### Keep direct `Runtime.query()` access
-
-Rejected because it bypasses the read boundary established by M4.9.
-
 ### Add a second query abstraction inside simulation
 
 Rejected because it duplicates the dashboard read boundary.
@@ -40,8 +36,6 @@ Rejected because Worker and React lifecycle concerns belong to the dashboard app
 The simulation feature and normal dashboard consumers now share one query read path.
 
 The runtime remains the ingestion and execution engine, while the query service remains the dashboard read boundary.
-
-The `createRuntime` hook option from M4.6 is intentionally removed from the canonical simulation controller API.
 
 ## Implementation Notes
 

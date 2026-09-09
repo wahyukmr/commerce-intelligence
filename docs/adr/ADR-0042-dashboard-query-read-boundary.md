@@ -7,7 +7,7 @@
 
 ## Context
 
-M4.8 introduced a composition object for existing commerce query implementations. Dashboard code still needed a stable read-side boundary that could consume this composition without duplicating query selection or knowing runtime internals.
+Dashboard code still needed a stable read-side boundary that could consume this composition without duplicating query selection or knowing runtime internals.
 
 The dashboard should not contain commerce calculation logic, projection registration logic, or imports from internal package paths.
 
