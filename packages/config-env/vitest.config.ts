@@ -1,3 +1,3 @@
-import { nodeConfig } from "@ci/config-vitest/node";
+import { nodeConfig } from "@ci/config-vitest";
 
 export default nodeConfig;

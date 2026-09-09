@@ -29,16 +29,17 @@ export interface SimulationResult {
 export type SimulationEvent = CommerceEvent | BehavioralEvent;
 
 export class SimulationGenerator {
+  private readonly config: SimulationConfig;
+  private readonly scenario: SimulationScenario;
   private readonly random: SeededRandom;
   private readonly timeline: Timeline;
   private readonly ids: SimulationIdFactory;
   private readonly events: SimulationEventFactory;
   private readonly clock: SimulationCausalClock;
 
-  constructor(
-    private readonly config: SimulationConfig,
-    private readonly scenario: SimulationScenario,
-  ) {
+  constructor(config: SimulationConfig, scenario: SimulationScenario) {
+    this.config = config;
+    this.scenario = scenario;
     this.random = new SeededRandom(config.seed);
     this.timeline = new Timeline(config.startAt, config.days);
     this.ids = new SimulationIdFactory(`simulation-${config.seed}`);

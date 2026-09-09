@@ -16,10 +16,13 @@ export interface SessionEventClock {
 }
 
 export class SimulationCausalClock {
-  constructor(
-    private readonly timeline: Timeline,
-    private readonly random: SeededRandom,
-  ) {}
+  private readonly timeline: Timeline;
+  private readonly random: SeededRandom;
+
+  constructor(timeline: Timeline, random: SeededRandom) {
+    this.timeline = timeline;
+    this.random = random;
+  }
 
   public createSession(baseOffsetMs: number): SessionEventClock {
     const sessionStartedAt = Date.parse(this.timeline.atOffset(baseOffsetMs));

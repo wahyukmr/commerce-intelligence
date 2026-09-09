@@ -20,12 +20,10 @@ export interface SimulationRunOptions {
 
 export class SimulationRunner {
   private readonly generator: SimulationGenerator;
+  private readonly runtime: Runtime;
 
-  constructor(
-    private readonly runtime: Runtime,
-    config: SimulationConfig,
-    scenario: SimulationScenario,
-  ) {
+  constructor(runtime: Runtime, config: SimulationConfig, scenario: SimulationScenario) {
+    this.runtime = runtime;
     this.generator = new SimulationGenerator(config, scenario);
   }
 
