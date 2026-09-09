@@ -32,7 +32,7 @@
 
     "test": {
       "inputs": ["$TURBO_DEFAULT$", "vitest.config.ts"],
-      "dependsOn": ["^test"],
+      "dependsOn": ["^test", "@ci/config-vitest#build"],
       "outputs": ["coverage/**"]
     },
 

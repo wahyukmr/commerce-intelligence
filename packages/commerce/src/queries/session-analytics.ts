@@ -22,10 +22,12 @@ export interface SessionAnalyticsSummary {
 }
 
 function getSessionState(snapshot: RuntimeSnapshot): SessionBehaviorProjectionState {
-  const projection = snapshot.projections.find((item) => item.name === "commerce.session-behavior");
+  const projection = snapshot.projections.find(
+    (item) => item.name === "commerce.session.analytics",
+  );
 
   if (!projection) {
-    throw new Error('Required projection "commerce.session-behavior" is not available.');
+    throw new Error('Required projection "commerce.session.analytics" is not available.');
   }
 
   return projection.state as SessionBehaviorProjectionState;

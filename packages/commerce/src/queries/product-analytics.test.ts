@@ -251,6 +251,6 @@ describe("ProductAnalyticsQuery", () => {
           tenantId: "tenant-1",
         },
       ),
-    ).toThrow('Required projection "commerce.product-analytics" is not available.');
+    ).toThrow('Required projection "commerce.product.analytics" is not available.');
   });
 });

@@ -1,4 +1,4 @@
-import { webConfig } from "@ci/config-vitest/web";
+import { webConfig } from "@ci/config-vitest";
 import react from "@vitejs/plugin-react";
 import { defineConfig, mergeConfig } from "vitest/config";
 

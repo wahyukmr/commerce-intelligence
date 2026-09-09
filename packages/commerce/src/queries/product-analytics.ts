@@ -25,11 +25,11 @@ export interface TopProductsQueryInput {
 
 function getProductAnalyticsState(snapshot: RuntimeSnapshot): ProductAnalyticsProjectionState {
   const projection = snapshot.projections.find(
-    (item) => item.name === "commerce.product-analytics",
+    (item) => item.name === "commerce.product.analytics",
   );
 
   if (!projection) {
-    throw new Error('Required projection "commerce.product-analytics" is not available.');
+    throw new Error('Required projection "commerce.product.analytics" is not available.');
   }
 
   return projection.state as ProductAnalyticsProjectionState;

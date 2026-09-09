@@ -1,19 +1,12 @@
 {
   "name": "@ci/simulation",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./src/index.ts"
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "typecheck": "tsc --noEmit",
@@ -23,6 +16,8 @@
   },
   "devDependencies": {
     "@ci/config-typescript": "workspace:*",
-    "@ci/config-vitest": "workspace:*"
+    "@ci/config-vitest": "workspace:*",
+    "@ci/commerce": "workspace:*",
+    "@ci/runtime": "workspace:*"
   }
 }

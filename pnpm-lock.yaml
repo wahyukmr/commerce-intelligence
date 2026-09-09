@@ -274,6 +274,9 @@ importers:
         specifier: 'catalog:'
         version: 19.2.8(react@19.2.8)
     devDependencies:
+      '@ci/commerce':
+        specifier: workspace:*
+        version: link:../../packages/commerce
       '@ci/config-env':
         specifier: workspace:*
         version: link:../../packages/config-env
@@ -283,6 +286,12 @@ importers:
       '@ci/config-vitest':
         specifier: workspace:*
         version: link:../../packages/config-vitest
+      '@ci/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
+      '@ci/simulation':
+        specifier: workspace:*
+        version: link:../../packages/simulation
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2
@@ -365,12 +374,18 @@ importers:
 
   packages/simulation:
     devDependencies:
+      '@ci/commerce':
+        specifier: workspace:*
+        version: link:../commerce
       '@ci/config-typescript':
         specifier: workspace:*
         version: link:../config-typescript
       '@ci/config-vitest':
         specifier: workspace:*
         version: link:../config-vitest
+      '@ci/runtime':
+        specifier: workspace:*
+        version: link:../runtime
 
 packages:
 

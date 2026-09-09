@@ -268,11 +268,11 @@ describe("Commerce runtime integration", () => {
 
     expect(runtime.projectionNames).toEqual([
       "commerce.customer",
-      "commerce.customer-analytics",
+      "commerce.customer.analytics",
       "commerce.order",
       "commerce.revenue",
-      "commerce.product-analytics",
-      "commerce.session-behavior",
+      "commerce.product.analytics",
+      "commerce.session.analytics",
       "commerce.funnel",
       "commerce.retention",
     ]);

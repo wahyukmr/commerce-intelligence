@@ -38,11 +38,11 @@ export interface TopCustomer {
 
 function getCustomerAnalyticsState(snapshot: RuntimeSnapshot): CustomerAnalyticsProjectionState {
   const projection = snapshot.projections.find(
-    (item) => item.name === "commerce.customer-analytics",
+    (item) => item.name === "commerce.customer.analytics",
   );
 
   if (!projection) {
-    throw new Error('Required projection "commerce.customer-analytics" is not available.');
+    throw new Error('Required projection "commerce.customer.analytics" is not available.');
   }
 
   return projection.state as CustomerAnalyticsProjectionState;

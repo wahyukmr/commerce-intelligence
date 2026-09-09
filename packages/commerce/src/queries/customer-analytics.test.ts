@@ -239,6 +239,6 @@ describe("CustomerAnalyticsQuery", () => {
           tenantId: "tenant-1",
         },
       ),
-    ).toThrow('Required projection "commerce.customer-analytics" is not available.');
+    ).toThrow('Required projection "commerce.customer.analytics" is not available.');
   });
 });
