@@ -16,9 +16,7 @@ export type {
 } from "./contracts/snapshot.js";
 export { DuplicateRegistrationError } from "./errors/duplicate-registration-error.js";
 export { RuntimeError } from "./errors/runtime-error.js";
-
+export * from "./input/index.js";
 export { ProjectionRegistry } from "./registry/projection-registry.js";
-
 export { QueryRegistry } from "./registry/query-registry.js";
-
 export { Runtime } from "./runtime/runtime.js";
