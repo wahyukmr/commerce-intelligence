@@ -1,10 +1,5 @@
 {
-  "extends": "@ci/config-typescript/library.json",
-  "compilerOptions": {
-    "declaration": false,
-    "declarationMap": false,
-    "noEmit": true
-  },
+  "extends": "@ci/config-typescript/node.json",
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
