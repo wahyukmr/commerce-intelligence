@@ -17,6 +17,10 @@ export function createRuntimeIngestionHandler(
     try {
       assertValidEventEnvelope(event);
 
+      if (event.tenantId !== runtime.tenantId) {
+        throw new Error(`event.tenantId does not match runtime tenant "${runtime.tenantId}"`);
+      }
+
       runtime.ingest([event]);
 
       options.onAccepted?.(event);

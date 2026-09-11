@@ -30,7 +30,9 @@ export function assertValidEventEnvelope(event: EventEnvelope): asserts event is
 
   assertNonEmptyString(event.id, "event.id");
   assertNonEmptyString(event.type, "event.type");
-  assertNonEmptyString(event.version, "event.version");
+  if (!Number.isInteger(event.version) || event.version < 1) {
+    throw new EventEnvelopeValidationError("event.version must be a positive integer");
+  }
   assertValidTimestamp(event.occurredAt, "event.occurredAt");
   assertNonEmptyString(event.tenantId, "event.tenantId");
 
