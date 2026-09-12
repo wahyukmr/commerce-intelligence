@@ -1,7 +1,7 @@
 import type { Projection, ProjectionContext } from "@ci/runtime";
-import type { Order, OrderItem, OrderProjectionState } from "../domain/order.js";
-import type { CommerceEvent } from "../events/commerce-event.js";
-import { COMMERCE_EVENT_TYPES } from "../events/event-types.js";
+import type { Order, OrderItem, OrderProjectionState } from "../domain/order";
+import type { CommerceEvent } from "../events/commerce-event";
+import { COMMERCE_EVENT_TYPES } from "../events/event-types";
 
 export class OrderProjection implements Projection<OrderProjectionState> {
   readonly name = "commerce.order";

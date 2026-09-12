@@ -3,9 +3,9 @@ import type {
   CustomerRetentionRecord,
   RetentionCohort,
   RetentionProjectionState,
-} from "../domain/retention.js";
-import type { OrderPaidPayload } from "../events/commerce-event.js";
-import { COMMERCE_EVENT_TYPES } from "../events/event-types.js";
+} from "../domain/retention";
+import type { OrderPaidPayload } from "../events/commerce-event";
+import { COMMERCE_EVENT_TYPES } from "../events/event-types";
 
 type RetentionEvent = EventEnvelope<"order.paid", OrderPaidPayload>;
 

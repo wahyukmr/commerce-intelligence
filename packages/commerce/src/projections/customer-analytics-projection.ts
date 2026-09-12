@@ -2,9 +2,9 @@ import type { Projection, ProjectionContext } from "@ci/runtime";
 import type {
   CustomerAnalytics,
   CustomerAnalyticsProjectionState,
-} from "../domain/customer-analytics.js";
-import type { CommerceEvent } from "../events/commerce-event.js";
-import { COMMERCE_EVENT_TYPES } from "../events/event-types.js";
+} from "../domain/customer-analytics";
+import type { CommerceEvent } from "../events/commerce-event";
+import { COMMERCE_EVENT_TYPES } from "../events/event-types";
 
 export class CustomerAnalyticsProjection implements Projection<CustomerAnalyticsProjectionState> {
   readonly name = "commerce.customer.analytics";

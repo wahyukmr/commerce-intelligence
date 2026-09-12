@@ -1,40 +1,40 @@
-export * from "./compositions/index.js";
+export * from "./compositions/index";
 export type {
   Customer,
   CustomerProjectionState,
-} from "./domain/customer.js";
+} from "./domain/customer";
 export type {
   CustomerAnalytics,
   CustomerAnalyticsProjectionState,
-} from "./domain/customer-analytics.js";
+} from "./domain/customer-analytics";
 export type {
   FunnelConversion,
   FunnelCounts,
   FunnelProjectionState,
   FunnelSession,
   FunnelStage,
-} from "./domain/funnel.js";
+} from "./domain/funnel";
 export type {
   Order,
   OrderItem,
   OrderProjectionState,
   OrderStatus,
-} from "./domain/order.js";
+} from "./domain/order";
 export type {
   Product,
   ProductAnalytics,
   ProductAnalyticsProjectionState,
-} from "./domain/product.js";
+} from "./domain/product";
 export type {
   CustomerRetentionRecord,
   RetentionCohort,
   RetentionProjectionState,
-} from "./domain/retention.js";
-export type { RevenueProjectionState } from "./domain/revenue.js";
+} from "./domain/retention";
+export type { RevenueProjectionState } from "./domain/revenue";
 export type {
   SessionAnalytics,
   SessionBehaviorProjectionState,
-} from "./domain/session.js";
+} from "./domain/session";
 export type {
   BehavioralEvent,
   BehavioralEventEnvelope,
@@ -42,7 +42,7 @@ export type {
   CheckoutStartedPayload,
   ProductViewedPayload,
   SessionStartedPayload,
-} from "./events/behavioral-event.js";
+} from "./events/behavioral-event";
 export type {
   CommerceEvent,
   CommerceEventEnvelope,
@@ -53,75 +53,75 @@ export type {
   OrderPaidPayload,
   OrderPlacedPayload,
   RefundIssuedPayload,
-} from "./events/commerce-event.js";
-export { COMMERCE_EVENT_TYPES } from "./events/event-types.js";
-export { CustomerAnalyticsProjection } from "./projections/customer-analytics-projection.js";
-export { CustomerProjection } from "./projections/customer-projection.js";
-export { FunnelProjection } from "./projections/funnel-projection.js";
-export { OrderProjection } from "./projections/order-projection.js";
-export { ProductAnalyticsProjection } from "./projections/product-analytics-projection.js";
-export { RetentionProjection } from "./projections/retention-projection.js";
-export { RevenueProjection } from "./projections/revenue-projection.js";
-export { SessionBehaviorProjection } from "./projections/session-behavior-projection.js";
+} from "./events/commerce-event";
+export { COMMERCE_EVENT_TYPES } from "./events/event-types";
+export { CustomerAnalyticsProjection } from "./projections/customer-analytics-projection";
+export { CustomerProjection } from "./projections/customer-projection";
+export { FunnelProjection } from "./projections/funnel-projection";
+export { OrderProjection } from "./projections/order-projection";
+export { ProductAnalyticsProjection } from "./projections/product-analytics-projection";
+export { RetentionProjection } from "./projections/retention-projection";
+export { RevenueProjection } from "./projections/revenue-projection";
+export { SessionBehaviorProjection } from "./projections/session-behavior-projection";
 export type {
   CustomerAnalyticsQueryInput,
   CustomerAnalyticsQueryResult,
   CustomerAnalyticsSummary,
   TopCustomer,
   TopCustomersQueryInput,
-} from "./queries/customer-analytics.js";
+} from "./queries/customer-analytics";
 export {
   CustomerAnalyticsQuery,
   CustomerAnalyticsSummaryQuery,
   TopCustomersQuery,
-} from "./queries/customer-analytics.js";
+} from "./queries/customer-analytics";
 export type {
   FunnelQueryInput,
   FunnelSummary,
-} from "./queries/funnel.js";
+} from "./queries/funnel";
 export {
   FunnelSessionQuery,
   FunnelSummaryQuery,
-} from "./queries/funnel.js";
+} from "./queries/funnel";
 export type {
   ProductAnalyticsQueryInput,
   ProductAnalyticsQueryResult,
   ProductAnalyticsSummary,
   TopProductsQueryInput,
-} from "./queries/product-analytics.js";
+} from "./queries/product-analytics";
 export {
   ProductAnalyticsQuery,
   ProductAnalyticsSummaryQuery,
   TopProductsQuery,
-} from "./queries/product-analytics.js";
+} from "./queries/product-analytics";
 export type {
   RetentionCohortResult,
   RetentionPeriod,
   RetentionQueryInput,
   RetentionSummary,
-} from "./queries/retention.js";
+} from "./queries/retention";
 export {
   RetentionCohortQuery,
   RetentionSummaryQuery,
-} from "./queries/retention.js";
+} from "./queries/retention";
 export type {
   RevenueSummary,
   RevenueSummaryQueryInput,
-} from "./queries/revenue.js";
-export { RevenueSummaryQuery } from "./queries/revenue.js";
+} from "./queries/revenue";
+export { RevenueSummaryQuery } from "./queries/revenue";
 export type {
   SessionAnalyticsQueryInput,
   SessionAnalyticsQueryResult,
   SessionAnalyticsSummary,
-} from "./queries/session-analytics.js";
+} from "./queries/session-analytics";
 export {
   EngagedSessionsQuery,
   SessionAnalyticsQuery,
   SessionAnalyticsSummaryQuery,
-} from "./queries/session-analytics.js";
-export type { CommerceEventValidationResult } from "./validation/commerce-event-validation.js";
+} from "./queries/session-analytics";
+export type { CommerceEventValidationResult } from "./validation/commerce-event-validation";
 export {
   assertValidCommerceEvent,
   CommerceEventValidationError,
   validateCommerceEvent,
-} from "./validation/commerce-event-validation.js";
+} from "./validation/commerce-event-validation";

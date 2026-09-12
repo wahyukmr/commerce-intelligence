@@ -1,6 +1,6 @@
 import type { Query, QueryContext, RuntimeSnapshot } from "@ci/runtime";
 
-import type { ProductAnalytics, ProductAnalyticsProjectionState } from "../domain/product.js";
+import type { ProductAnalytics, ProductAnalyticsProjectionState } from "../domain/product";
 
 export interface ProductAnalyticsQueryInput {
   readonly productId: string;

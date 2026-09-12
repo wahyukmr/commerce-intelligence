@@ -1,6 +1,6 @@
 import type { Query, QueryContext, RuntimeSnapshot } from "@ci/runtime";
 
-import type { RevenueProjectionState } from "../domain/revenue.js";
+import type { RevenueProjectionState } from "../domain/revenue";
 
 export interface RevenueSummaryQueryInput {
   readonly includeRefunds?: boolean;

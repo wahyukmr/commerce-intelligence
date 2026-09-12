@@ -1,6 +1,6 @@
 import type { Query, QueryContext, RuntimeSnapshot } from "@ci/runtime";
 
-import type { SessionAnalytics, SessionBehaviorProjectionState } from "../domain/session.js";
+import type { SessionAnalytics, SessionBehaviorProjectionState } from "../domain/session";
 
 export interface SessionAnalyticsQueryInput {
   readonly sessionId: string;

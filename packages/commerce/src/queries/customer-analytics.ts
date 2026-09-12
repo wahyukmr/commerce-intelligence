@@ -3,7 +3,7 @@ import type { Query, QueryContext, RuntimeSnapshot } from "@ci/runtime";
 import type {
   CustomerAnalytics,
   CustomerAnalyticsProjectionState,
-} from "../domain/customer-analytics.js";
+} from "../domain/customer-analytics";
 
 export interface CustomerAnalyticsQueryInput {
   readonly customerId: string;

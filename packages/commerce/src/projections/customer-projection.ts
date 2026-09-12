@@ -1,7 +1,7 @@
 import type { Projection, ProjectionContext } from "@ci/runtime";
-import type { Customer, CustomerProjectionState } from "../domain/customer.js";
-import type { CommerceEvent } from "../events/commerce-event.js";
-import { COMMERCE_EVENT_TYPES } from "../events/event-types.js";
+import type { Customer, CustomerProjectionState } from "../domain/customer";
+import type { CommerceEvent } from "../events/commerce-event";
+import { COMMERCE_EVENT_TYPES } from "../events/event-types";
 
 export class CustomerProjection implements Projection<CustomerProjectionState> {
   readonly name = "commerce.customer";

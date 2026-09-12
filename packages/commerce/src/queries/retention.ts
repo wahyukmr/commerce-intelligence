@@ -1,5 +1,5 @@
 import type { Query, QueryContext, RuntimeSnapshot } from "@ci/runtime";
-import type { RetentionCohort, RetentionProjectionState } from "../domain/retention.js";
+import type { RetentionCohort, RetentionProjectionState } from "../domain/retention";
 
 export interface RetentionQueryInput {
   readonly cohortWeek?: string;
