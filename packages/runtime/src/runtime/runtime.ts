@@ -1,10 +1,10 @@
-import type { EventEnvelope } from "../contracts/event.js";
-import type { Projection } from "../contracts/projection.js";
-import type { Query } from "../contracts/query.js";
-import type { RuntimeSnapshot } from "../contracts/snapshot.js";
-import { ProjectionRegistry } from "../registry/projection-registry.js";
-import { QueryRegistry } from "../registry/query-registry.js";
-import { RuntimeState } from "./runtime-state.js";
+import type { EventEnvelope } from "../contracts/event";
+import type { Projection } from "../contracts/projection";
+import type { Query } from "../contracts/query";
+import type { RuntimeSnapshot } from "../contracts/snapshot";
+import { ProjectionRegistry } from "../registry/projection-registry";
+import { QueryRegistry } from "../registry/query-registry";
+import { RuntimeState } from "./runtime-state";
 
 export interface RuntimeOptions {
   readonly tenantId: string;

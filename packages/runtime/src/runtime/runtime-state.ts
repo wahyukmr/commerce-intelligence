@@ -1,6 +1,6 @@
-import type { EventEnvelope } from "../contracts/event.js";
-import type { Projection, ProjectionContext } from "../contracts/projection.js";
-import type { ProjectionSnapshot, RuntimeSnapshot } from "../contracts/snapshot.js";
+import type { EventEnvelope } from "../contracts/event";
+import type { Projection, ProjectionContext } from "../contracts/projection";
+import type { ProjectionSnapshot, RuntimeSnapshot } from "../contracts/snapshot";
 
 interface ProjectionState {
   readonly projection: Projection<unknown>;

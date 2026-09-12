@@ -1,6 +1,9 @@
 import type { EventEnvelope } from "../contracts/event";
+import type { IngestionOutcome } from "./ingestion-outcome";
 
-export type IngestionEventHandler = (event: EventEnvelope) => void | Promise<void>;
+export type IngestionEventHandler = (
+  event: EventEnvelope,
+) => IngestionOutcome | Promise<IngestionOutcome>;
 
 export interface IngestionAdapter {
   readonly name: string;

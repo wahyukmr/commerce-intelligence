@@ -1,8 +1,11 @@
 /// <reference lib="dom" />
 
-import type { Runtime } from "../runtime/runtime.js";
-import { createRuntimeIngestionHandler } from "./event-ingestion-handler.js";
-import type { HttpWebhookAdapter, HttpWebhookResponse } from "./http-webhook-adapter.js";
+import type { Runtime } from "../runtime/runtime";
+import {
+  createRuntimeIngestionHandler,
+  type RuntimeIngestionHandlerOptions,
+} from "./event-ingestion-handler";
+import type { HttpWebhookAdapter, HttpWebhookResponse } from "./http-webhook-adapter";
 
 export interface HttpIngestionComposition {
   readonly adapter: HttpWebhookAdapter;
@@ -14,30 +17,17 @@ export interface HttpIngestionComposition {
 export interface CreateHttpIngestionCompositionOptions {
   readonly adapter: HttpWebhookAdapter;
   readonly runtime: Runtime;
-  readonly onAccepted?: Parameters<typeof createRuntimeIngestionHandler>[1] extends infer T
-    ? T extends { onAccepted?: infer O }
-      ? O
-      : never
-    : never;
-  readonly onRejected?: Parameters<typeof createRuntimeIngestionHandler>[1] extends infer T
-    ? T extends { onRejected?: infer O }
-      ? O
-      : never
-    : never;
+  readonly ingestion?: RuntimeIngestionHandlerOptions;
 }
 
 export function createHttpIngestionComposition({
   adapter,
   runtime,
-  onAccepted,
-  onRejected,
+  ingestion,
 }: CreateHttpIngestionCompositionOptions): HttpIngestionComposition {
   let started = false;
 
-  const handler = createRuntimeIngestionHandler(runtime, {
-    onAccepted,
-    onRejected,
-  });
+  const handler = createRuntimeIngestionHandler(runtime, ingestion);
 
   return {
     adapter,

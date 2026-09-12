@@ -1,5 +1,5 @@
-import type { Projection } from "../contracts/projection.js";
-import { DuplicateRegistrationError } from "../errors/duplicate-registration-error.js";
+import type { Projection } from "../contracts/projection";
+import { DuplicateRegistrationError } from "../errors/duplicate-registration-error";
 
 export class ProjectionRegistry {
   private readonly projections = new Map<string, Projection<unknown>>();

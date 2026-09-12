@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import type { EventEnvelope } from "../contracts/event";
+import type { EventEnvelope } from "../contracts/event.js";
 import { HttpWebhookAdapter } from "./http-webhook-adapter.js";
+import type { IngestionOutcome } from "./ingestion-outcome.js";
 
 const event: EventEnvelope = {
   id: "evt-1",
@@ -12,6 +13,13 @@ const event: EventEnvelope = {
   payload: {
     value: 1,
   },
+};
+
+const accepted: IngestionOutcome = {
+  status: "accepted",
+  eventId: event.id,
+  tenantId: event.tenantId,
+  receivedAt: "2026-09-11T08:00:00.000Z",
 };
 
 function createRequest(body: string, headers: Record<string, string> = {}): Request {
@@ -50,7 +58,7 @@ describe("HttpWebhookAdapter replay protection", () => {
     const secret = "secret";
     const signature = await hmacHex(body, secret);
 
-    const accepted: EventEnvelope[] = [];
+    const receivedEvents: EventEnvelope[] = [];
 
     const adapter = new HttpWebhookAdapter({
       signature: {
@@ -59,7 +67,8 @@ describe("HttpWebhookAdapter replay protection", () => {
     });
 
     adapter.start((receivedEvent) => {
-      accepted.push(receivedEvent);
+      receivedEvents.push(receivedEvent);
+      return accepted;
     });
 
     const response = await adapter.handle(
@@ -69,7 +78,7 @@ describe("HttpWebhookAdapter replay protection", () => {
     );
 
     expect(response.status).toBe(202);
-    expect(accepted).toHaveLength(1);
+    expect(receivedEvents).toHaveLength(1);
   });
 
   it("accepts a timestamped signature inside the freshness window", async () => {
@@ -80,7 +89,7 @@ describe("HttpWebhookAdapter replay protection", () => {
 
     const signature = await hmacHex(`${timestamp}.${body}`, secret);
 
-    const accepted: EventEnvelope[] = [];
+    const receivedEvents: EventEnvelope[] = [];
 
     const adapter = new HttpWebhookAdapter({
       signature: {
@@ -91,7 +100,8 @@ describe("HttpWebhookAdapter replay protection", () => {
     });
 
     adapter.start((receivedEvent) => {
-      accepted.push(receivedEvent);
+      receivedEvents.push(receivedEvent);
+      return accepted;
     });
 
     const response = await adapter.handle(
@@ -102,7 +112,7 @@ describe("HttpWebhookAdapter replay protection", () => {
     );
 
     expect(response.status).toBe(202);
-    expect(accepted).toHaveLength(1);
+    expect(receivedEvents).toHaveLength(1);
   });
 
   it("rejects a missing timestamp when timestamp verification is configured", async () => {
@@ -119,7 +129,7 @@ describe("HttpWebhookAdapter replay protection", () => {
       },
     });
 
-    adapter.start(() => undefined);
+    adapter.start(() => accepted);
 
     const response = await adapter.handle(
       createRequest(body, {
@@ -150,6 +160,7 @@ describe("HttpWebhookAdapter replay protection", () => {
 
     adapter.start((receivedEvent) => {
       delivered.push(receivedEvent);
+      return accepted;
     });
 
     const response = await adapter.handle(
@@ -179,7 +190,7 @@ describe("HttpWebhookAdapter replay protection", () => {
       },
     });
 
-    adapter.start(() => undefined);
+    adapter.start(() => accepted);
 
     const response = await adapter.handle(
       createRequest(body, {
@@ -201,5 +212,68 @@ describe("HttpWebhookAdapter replay protection", () => {
           },
         }),
     ).toThrow("timestampHeaderName is required");
+  });
+
+  it("rejects content types that only contain application/json as a substring", async () => {
+    const adapter = new HttpWebhookAdapter();
+    adapter.start(() => accepted);
+
+    const response = await adapter.handle(
+      new Request("https://example.com/webhooks/events", {
+        method: "POST",
+        headers: { "content-type": "text/application/json" },
+        body: JSON.stringify(event),
+      }),
+    );
+
+    expect(response.status).toBe(415);
+  });
+});
+
+describe("HttpWebhookAdapter security hardening", () => {
+  it("rejects oversized request bodies", async () => {
+    const adapter = new HttpWebhookAdapter({
+      security: { maxBodyBytes: 10 },
+    });
+
+    adapter.start(async () => accepted);
+
+    const response = await adapter.handle(createRequest(JSON.stringify(event)));
+
+    expect(response.status).toBe(413);
+  });
+
+  it("requires configured security headers", async () => {
+    const adapter = new HttpWebhookAdapter({
+      security: {
+        requiredHeaders: ["x-source-token"],
+      },
+    });
+
+    adapter.start(async () => accepted);
+
+    const response = await adapter.handle(createRequest(JSON.stringify(event)));
+
+    expect(response.status).toBe(403);
+  });
+
+  it("returns accepted and duplicate semantics from the ingestion handler", async () => {
+    const adapter = new HttpWebhookAdapter();
+    adapter.start(async () => ({
+      ...accepted,
+      status: "duplicate",
+    }));
+
+    const response = await adapter.handle(createRequest(JSON.stringify(event)));
+
+    expect(response).toEqual({
+      status: 202,
+      body: {
+        accepted: false,
+        duplicate: true,
+        eventId: "evt-1",
+        outcome: "duplicate",
+      },
+    });
   });
 });

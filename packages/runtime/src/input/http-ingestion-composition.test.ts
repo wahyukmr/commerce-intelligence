@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { EventEnvelope } from "../contracts/event";
+import type { EventEnvelope } from "../contracts/event.js";
 import { Runtime } from "../runtime/runtime.js";
 import { createHttpIngestionComposition } from "./http-ingestion-composition.js";
 import { HttpWebhookAdapter } from "./http-webhook-adapter.js";
@@ -32,7 +32,13 @@ describe("createHttpIngestionComposition", () => {
     const composition = createHttpIngestionComposition({
       adapter,
       runtime,
-      onAccepted: accepted,
+      ingestion: {
+        observer: {
+          onReceived: () => undefined,
+          onCompleted: (receivedEvent) => accepted(receivedEvent),
+          onFailed: () => undefined,
+        },
+      },
     });
 
     composition.start();
@@ -85,7 +91,13 @@ describe("createHttpIngestionComposition", () => {
     const composition = createHttpIngestionComposition({
       adapter,
       runtime,
-      onRejected,
+      ingestion: {
+        observer: {
+          onReceived: () => undefined,
+          onCompleted: () => undefined,
+          onFailed: (_event, error) => onRejected(error),
+        },
+      },
     });
 
     composition.start();

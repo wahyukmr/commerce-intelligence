@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { EventEnvelope } from "../contracts/event.js";
 import type { IngestionAdapter, IngestionEventHandler } from "./ingestion-adapter.js";
+import type { IngestionOutcome } from "./ingestion-outcome.js";
 
 const event: EventEnvelope = {
   id: "evt_1",
@@ -9,6 +10,13 @@ const event: EventEnvelope = {
   occurredAt: "2026-01-01T00:00:00.000Z",
   tenantId: "tenant_1",
   payload: { customerId: "cus_1" },
+};
+
+const accepted: IngestionOutcome = {
+  status: "accepted",
+  eventId: event.id,
+  tenantId: event.tenantId,
+  receivedAt: "2026-09-11T08:00:00.000Z",
 };
 
 class FakeIngestionAdapter implements IngestionAdapter {
@@ -51,6 +59,7 @@ describe("IngestionAdapter", () => {
     await adapter.start(async (nextEvent) => {
       received.push(nextEvent);
       resolve();
+      return accepted;
     });
 
     adapter.emit(event);
@@ -71,6 +80,7 @@ describe("IngestionAdapter", () => {
 
     adapter.start((nextEvent) => {
       received.push(nextEvent);
+      return accepted;
     });
     adapter.stop();
 

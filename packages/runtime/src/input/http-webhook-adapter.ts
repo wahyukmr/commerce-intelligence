@@ -1,7 +1,15 @@
 /// <reference lib="dom" />
 
 import type { EventEnvelope } from "../contracts/event";
-import type { IngestionAdapter, IngestionEventHandler } from "./ingestion-adapter.js";
+import {
+  assertBodySize,
+  assertContentType,
+  assertRequestHeaders,
+  validateWebhookSecurityOptions,
+  WebhookSecurityError,
+  type WebhookSecurityOptions,
+} from "../security/index";
+import type { IngestionAdapter, IngestionEventHandler } from "./ingestion-adapter";
 
 export interface HttpWebhookSignatureOptions {
   readonly secret: string;
@@ -16,6 +24,7 @@ export interface HttpWebhookAdapterOptions {
   readonly method?: string;
   readonly path?: string;
   readonly signature?: HttpWebhookSignatureOptions;
+  readonly security?: WebhookSecurityOptions;
 }
 
 export interface HttpWebhookResponse {
@@ -29,17 +38,19 @@ export class HttpWebhookAdapter implements IngestionAdapter {
   private readonly method: string;
   private readonly path: string | undefined;
   private readonly signature: HttpWebhookSignatureOptions | undefined;
-
+  private readonly security: WebhookSecurityOptions | undefined;
   private handler: IngestionEventHandler | undefined;
   private started = false;
 
-  public constructor(options: HttpWebhookAdapterOptions = {}) {
+  constructor(options: HttpWebhookAdapterOptions = {}) {
     this.name = options.name ?? "http-webhook";
     this.method = (options.method ?? "POST").toUpperCase();
     this.path = options.path;
     this.signature = options.signature;
+    this.security = options.security;
 
     validateSignatureOptions(this.signature);
+    validateWebhookSecurityOptions(this.security);
   }
 
   public start(handler: IngestionEventHandler): void {
@@ -58,100 +69,91 @@ export class HttpWebhookAdapter implements IngestionAdapter {
 
   public async handle(request: Request): Promise<HttpWebhookResponse> {
     if (!this.started || !this.handler) {
-      return {
-        status: 503,
-        body: {
-          error: "HTTP webhook adapter is not started",
-        },
-      };
+      return { status: 503, body: { error: "HTTP webhook adapter is not started" } };
     }
 
     if (request.method.toUpperCase() !== this.method) {
-      return {
-        status: 405,
-        body: {
-          error: "Method not allowed",
-        },
-      };
+      return { status: 405, body: { error: "Method not allowed" } };
     }
 
     if (this.path && new URL(request.url).pathname !== this.path) {
-      return {
-        status: 404,
-        body: {
-          error: "Not found",
-        },
-      };
+      return { status: 404, body: { error: "Not found" } };
+    }
+
+    try {
+      assertRequestHeaders(request, this.security);
+      assertContentType(request, this.security);
+    } catch (error) {
+      if (error instanceof WebhookSecurityError) {
+        return {
+          status: error.status,
+          body: { error: error.message },
+        };
+      }
+
+      throw error;
     }
 
     const contentType = request.headers.get("content-type") ?? "";
 
-    if (!contentType.toLowerCase().includes("application/json")) {
-      return {
-        status: 415,
-        body: {
-          error: "Content-Type must be application/json",
-        },
-      };
+    const mediaType = contentType.split(";", 1)[0]?.trim().toLowerCase();
+
+    if (mediaType !== "application/json") {
+      return { status: 415, body: { error: "Content-Type must be application/json" } };
     }
 
     let body: string;
 
     try {
       body = await request.text();
-    } catch {
-      return {
-        status: 400,
-        body: {
-          error: "Unable to read request body",
-        },
-      };
+      assertBodySize(body, this.security);
+    } catch (error) {
+      if (error instanceof WebhookSecurityError) {
+        return {
+          status: error.status,
+          body: { error: error.message },
+        };
+      }
+
+      return { status: 400, body: { error: "Unable to read request body" } };
     }
 
     if (this.signature) {
       const verification = await verifyWebhookSignature(request, body, this.signature);
 
       if (!verification.valid) {
-        return {
-          status: verification.status,
-          body: {
-            error: verification.error,
-          },
-        };
+        return { status: verification.status, body: { error: verification.error } };
       }
     }
 
     let event: EventEnvelope;
-
     try {
       event = parseEvent(JSON.parse(body));
     } catch {
       return {
         status: 400,
-        body: {
-          error: "Request body must contain a valid JSON event envelope",
-        },
+        body: { error: "Request body must contain a valid JSON event envelope" },
       };
     }
 
     try {
-      await this.handler(event);
+      const outcome = await this.handler(event);
+
+      return {
+        status: 202,
+        body: {
+          accepted: outcome.status === "accepted",
+          duplicate: outcome.status === "duplicate",
+          eventId: event.id,
+          outcome: outcome.status,
+        },
+      };
     } catch {
       return {
         status: 422,
-        body: {
-          error: "Event ingestion failed",
-        },
+        body: { error: "Event ingestion failed" },
       };
     }
-
-    return {
-      status: 202,
-      body: {
-        accepted: true,
-        eventId: event.id,
-      },
-    };
   }
 }
 
@@ -173,34 +175,21 @@ async function verifyWebhookSignature(
   const providedSignature = request.headers.get(options.headerName ?? "x-commerce-signature");
 
   if (!providedSignature) {
-    return {
-      valid: false,
-      status: 401,
-      error: "Missing webhook signature",
-    };
+    return { valid: false, status: 401, error: "Missing webhook signature" };
   }
 
   const timestampHeaderName = options.timestampHeaderName;
-
   const timestamp = timestampHeaderName ? request.headers.get(timestampHeaderName) : undefined;
 
   if (timestampHeaderName && !timestamp) {
-    return {
-      valid: false,
-      status: 401,
-      error: "Missing webhook timestamp",
-    };
+    return { valid: false, status: 401, error: "Missing webhook timestamp" };
   }
 
   if (timestamp && options.maxAgeSeconds !== undefined) {
     const timestampMs = parseWebhookTimestamp(timestamp);
 
     if (timestampMs === undefined) {
-      return {
-        valid: false,
-        status: 401,
-        error: "Invalid webhook timestamp",
-      };
+      return { valid: false, status: 401, error: "Invalid webhook timestamp" };
     }
 
     if (!isTimestampFresh(timestampMs, options.maxAgeSeconds)) {
@@ -213,26 +202,17 @@ async function verifyWebhookSignature(
   }
 
   const signedPayload = timestamp ? `${timestamp}.${body}` : body;
-
   const valid = await verifyHmacSha256(signedPayload, providedSignature, options.secret);
 
   if (!valid) {
-    return {
-      valid: false,
-      status: 401,
-      error: "Invalid webhook signature",
-    };
+    return { valid: false, status: 401, error: "Invalid webhook signature" };
   }
 
-  return {
-    valid: true,
-  };
+  return { valid: true };
 }
 
 function validateSignatureOptions(options: HttpWebhookSignatureOptions | undefined): void {
-  if (!options) {
-    return;
-  }
+  if (!options) return;
 
   if (options.secret.trim().length === 0) {
     throw new Error("Webhook signature secret must be non-empty");
@@ -257,20 +237,16 @@ function parseWebhookTimestamp(value: string): number | undefined {
 
   if (/^\d+$/.test(normalized)) {
     const numericValue = Number(normalized);
-
     const milliseconds = normalized.length <= 10 ? numericValue * 1000 : numericValue;
-
     return Number.isFinite(milliseconds) ? milliseconds : undefined;
   }
 
   const parsed = Date.parse(normalized);
-
   return Number.isNaN(parsed) ? undefined : parsed;
 }
 
 function isTimestampFresh(timestampMs: number, maxAgeSeconds: number): boolean {
   const ageMs = Math.abs(Date.now() - timestampMs);
-
   return ageMs <= maxAgeSeconds * 1000;
 }
 
@@ -280,7 +256,6 @@ async function verifyHmacSha256(
   secret: string,
 ): Promise<boolean> {
   const normalizedSignature = providedSignature.trim();
-
   const expectedPrefix = "sha256=";
 
   if (!normalizedSignature.toLowerCase().startsWith(expectedPrefix)) {
@@ -296,10 +271,7 @@ async function verifyHmacSha256(
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(secret),
-    {
-      name: "HMAC",
-      hash: "SHA-256",
-    },
+    { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"],
   );
@@ -307,7 +279,6 @@ async function verifyHmacSha256(
   const signature = await crypto.subtle.sign("HMAC", cryptoKey, new TextEncoder().encode(payload));
 
   const expectedHex = bytesToHex(new Uint8Array(signature));
-
   return timingSafeEqual(providedHex.toLowerCase(), expectedHex);
 }
 
@@ -330,9 +301,7 @@ function bytesToHex(bytes: Uint8Array): string {
 }
 
 function timingSafeEqual(left: string, right: string): boolean {
-  if (left.length !== right.length) {
-    return false;
-  }
+  if (left.length !== right.length) return false;
 
   let difference = 0;
 
