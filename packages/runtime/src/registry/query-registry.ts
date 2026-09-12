@@ -1,5 +1,5 @@
-import type { Query } from "../contracts/query.js";
-import { DuplicateRegistrationError } from "../errors/duplicate-registration-error.js";
+import type { Query } from "../contracts/query";
+import { DuplicateRegistrationError } from "../errors/duplicate-registration-error";
 
 export class QueryRegistry {
   private readonly queries = new Map<string, Query<unknown, unknown>>();
