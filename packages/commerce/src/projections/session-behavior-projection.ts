@@ -1,13 +1,13 @@
 import type { EventEnvelope, Projection, ProjectionContext } from "@ci/runtime";
-import type { SessionAnalytics, SessionBehaviorProjectionState } from "../domain/session.js";
+import type { SessionAnalytics, SessionBehaviorProjectionState } from "../domain/session";
 
 import type {
   CartItemAddedPayload,
   CheckoutStartedPayload,
   ProductViewedPayload,
   SessionStartedPayload,
-} from "../events/behavioral-event.js";
-import { COMMERCE_EVENT_TYPES } from "../events/event-types.js";
+} from "../events/behavioral-event";
+import { COMMERCE_EVENT_TYPES } from "../events/event-types";
 
 type SessionEvent =
   | EventEnvelope<"session.started", SessionStartedPayload>

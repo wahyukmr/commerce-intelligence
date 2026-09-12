@@ -1,7 +1,7 @@
 import type { Projection, ProjectionContext } from "@ci/runtime";
-import type { RevenueProjectionState } from "../domain/revenue.js";
-import type { CommerceEvent } from "../events/commerce-event.js";
-import { COMMERCE_EVENT_TYPES } from "../events/event-types.js";
+import type { RevenueProjectionState } from "../domain/revenue";
+import type { CommerceEvent } from "../events/commerce-event";
+import { COMMERCE_EVENT_TYPES } from "../events/event-types";
 
 export class RevenueProjection implements Projection<RevenueProjectionState> {
   readonly name = "commerce.revenue";

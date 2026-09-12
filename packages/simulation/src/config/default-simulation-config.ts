@@ -1,4 +1,4 @@
-import type { SimulationConfig } from "./simulation-config.js";
+import type { SimulationConfig } from "./simulation-config";
 
 export const DEFAULT_SIMULATION_CONFIG: SimulationConfig = {
   tenantId: "tenant-demo",

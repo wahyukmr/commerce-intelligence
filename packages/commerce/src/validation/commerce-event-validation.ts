@@ -1,5 +1,5 @@
-import type { BehavioralEvent } from "../events/behavioral-event.js";
-import type { CommerceEvent, OrderItemPayload } from "../events/commerce-event.js";
+import type { BehavioralEvent } from "../events/behavioral-event";
+import type { CommerceEvent, OrderItemPayload } from "../events/commerce-event";
 
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
 

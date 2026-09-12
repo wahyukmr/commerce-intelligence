@@ -1,3 +1,3 @@
-export { e2eEnv } from "./e2e.js";
-export { serverEnv } from "./server.js";
-export { sharedEnv, sharedSchema } from "./shared.js";
+export { e2eEnv } from "./e2e";
+export { serverEnv } from "./server";
+export { sharedEnv, sharedSchema } from "./shared";

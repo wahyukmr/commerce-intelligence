@@ -5,7 +5,7 @@ import type {
   FunnelCounts,
   FunnelProjectionState,
   FunnelStage,
-} from "../domain/funnel.js";
+} from "../domain/funnel";
 
 export interface FunnelQueryInput {
   readonly sessionId?: string;

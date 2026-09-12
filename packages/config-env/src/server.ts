@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { sharedSchema } from "./shared.js";
+import { sharedSchema } from "./shared";
 
 const serverSchema = sharedSchema.extend({
   DATABASE_URL: z.url(),

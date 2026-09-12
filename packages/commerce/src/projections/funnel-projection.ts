@@ -1,15 +1,15 @@
 import type { EventEnvelope, Projection, ProjectionContext } from "@ci/runtime";
-import type { FunnelProjectionState, FunnelSession } from "../domain/funnel.js";
+import type { FunnelProjectionState, FunnelSession } from "../domain/funnel";
 
 import type {
   CartItemAddedPayload,
   CheckoutStartedPayload,
   ProductViewedPayload,
   SessionStartedPayload,
-} from "../events/behavioral-event.js";
+} from "../events/behavioral-event";
 
-import type { OrderPaidPayload } from "../events/commerce-event.js";
-import { COMMERCE_EVENT_TYPES } from "../events/event-types.js";
+import type { OrderPaidPayload } from "../events/commerce-event";
+import { COMMERCE_EVENT_TYPES } from "../events/event-types";
 
 type FunnelEvent =
   | EventEnvelope<"session.started", SessionStartedPayload>

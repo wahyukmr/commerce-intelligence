@@ -1,6 +1,6 @@
 import type { EventEnvelope } from "@ci/runtime";
 
-import type { CommerceEventType } from "./event-types.js";
+import type { CommerceEventType } from "./event-types";
 
 export interface SessionStartedPayload {
   readonly sessionId: string;
