@@ -1,86 +1,129 @@
 import { describe, expect, it, vi } from "vitest";
-
-import type { EventEnvelope } from "../contracts/event";
+import type { EventEnvelope } from "../contracts/event.js";
+import { DuplicateEventError, InMemoryEventStore } from "../events/event-store.js";
+import { InMemoryIngestionMetrics } from "../observability/ingestion-metrics.js";
+import { createMetricsIngestionObserver } from "../observability/ingestion-observer.js";
 import { Runtime } from "../runtime/runtime.js";
-import { EventEnvelopeValidationError } from "./event-envelope-validation.js";
 import { createRuntimeIngestionHandler } from "./event-ingestion-handler.js";
+import { IngestionProcessingError } from "./ingestion-failure.js";
 
-function createEvent(overrides: Partial<EventEnvelope> = {}): EventEnvelope {
+function event(overrides: Partial<EventEnvelope> = {}): EventEnvelope {
   return {
     id: "evt-1",
     type: "test.event",
     version: 1,
-    occurredAt: "2026-09-10T08:00:00.000Z",
+    occurredAt: "2026-09-11T08:00:00.000Z",
     tenantId: "tenant-1",
-    payload: {
-      value: 1,
-    },
+    payload: { value: 1 },
     ...overrides,
   };
 }
 
 describe("createRuntimeIngestionHandler", () => {
-  it("validates and ingests a valid event", () => {
-    const runtime = new Runtime({
-      tenantId: "tenant-1",
-    });
-
-    const onAccepted = vi.fn();
-
+  it("returns accepted after runtime processing and event persistence", async () => {
+    const runtime = new Runtime({ tenantId: "tenant-1" });
+    const store = new InMemoryEventStore();
     const handler = createRuntimeIngestionHandler(runtime, {
-      onAccepted,
+      eventStore: store,
     });
 
-    const event = createEvent();
+    await expect(handler(event())).resolves.toMatchObject({
+      status: "accepted",
+      eventId: "evt-1",
+    });
 
-    handler(event);
-
-    expect(runtime.eventCount).toBe(1);
-    expect(onAccepted).toHaveBeenCalledWith(event);
+    await expect(store.has("evt-1")).resolves.toBe(true);
   });
 
-  it("rejects invalid events before runtime ingestion", () => {
-    const runtime = new Runtime({
-      tenantId: "tenant-1",
-    });
-
-    const onRejected = vi.fn();
+  it("returns duplicate without reprocessing an already stored event", async () => {
+    const runtime = new Runtime({ tenantId: "tenant-1" });
+    const store = new InMemoryEventStore();
+    await store.append(event());
 
     const handler = createRuntimeIngestionHandler(runtime, {
-      onRejected,
+      eventStore: store,
     });
 
-    const event = createEvent({
-      id: "",
+    await expect(handler(event())).resolves.toMatchObject({
+      status: "duplicate",
+      eventId: "evt-1",
     });
-
-    expect(() => handler(event)).toThrow(EventEnvelopeValidationError);
 
     expect(runtime.eventCount).toBe(0);
-    expect(onRejected).toHaveBeenCalledTimes(1);
-    expect(onRejected.mock.calls[0]?.[0]).toBe(event);
   });
 
-  it("does not invoke accepted callback after runtime rejects the event", () => {
-    const runtime = new Runtime({
-      tenantId: "tenant-1",
-    });
-
-    const onAccepted = vi.fn();
-    const onRejected = vi.fn();
+  it("retries transient runtime persistence failures", async () => {
+    const runtime = new Runtime({ tenantId: "tenant-1" });
+    const store = new InMemoryEventStore();
+    const append = vi.spyOn(store, "append");
+    append
+      .mockRejectedValueOnce(new Error("temporary storage failure"))
+      .mockImplementationOnce(async () => undefined);
 
     const handler = createRuntimeIngestionHandler(runtime, {
-      onAccepted,
-      onRejected,
+      eventStore: store,
+      retryPolicy: {
+        maxAttempts: 2,
+        delayMs: () => 0,
+        classify: () => ({
+          retry: true,
+          kind: "transient",
+          reason: "temporary storage failure",
+        }),
+      },
     });
 
-    const event = createEvent({
-      tenantId: "other-tenant",
+    await expect(handler(event())).resolves.toMatchObject({
+      status: "accepted",
     });
 
-    expect(() => handler(event)).toThrow();
+    expect(append).toHaveBeenCalledTimes(2);
+    expect(runtime.eventCount).toBe(1);
+  });
 
-    expect(onAccepted).not.toHaveBeenCalled();
-    expect(onRejected).toHaveBeenCalledTimes(1);
+  it("returns duplicate when persistence detects a concurrent delivery", async () => {
+    const runtime = new Runtime({ tenantId: "tenant-1" });
+    const store = new InMemoryEventStore();
+    vi.spyOn(store, "append").mockRejectedValueOnce(new DuplicateEventError("evt-1"));
+
+    const handler = createRuntimeIngestionHandler(runtime, { eventStore: store });
+
+    await expect(handler(event())).resolves.toMatchObject({
+      status: "duplicate",
+      eventId: "evt-1",
+    });
+
+    expect(runtime.eventCount).toBe(1);
+  });
+
+  it("reports failure and metrics after retries are exhausted", async () => {
+    const runtime = new Runtime({ tenantId: "tenant-1" });
+    const store = new InMemoryEventStore();
+    vi.spyOn(store, "append").mockRejectedValue(
+      new IngestionProcessingError("storage unavailable", "transient"),
+    );
+
+    const metrics = new InMemoryIngestionMetrics();
+    const handler = createRuntimeIngestionHandler(runtime, {
+      eventStore: store,
+      observer: createMetricsIngestionObserver(metrics),
+      retryPolicy: {
+        maxAttempts: 2,
+        delayMs: () => 0,
+        classify: (error) => ({
+          retry: error instanceof IngestionProcessingError,
+          kind: "transient",
+          reason: "storage unavailable",
+        }),
+      },
+    });
+
+    await expect(handler(event())).rejects.toThrow("Event persistence failed");
+
+    expect(metrics.snapshot()).toMatchObject({
+      received: 1,
+      failed: 1,
+      transientFailures: 1,
+    });
   });
 });
