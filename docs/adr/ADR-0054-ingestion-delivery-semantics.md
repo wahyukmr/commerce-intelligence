@@ -4,6 +4,7 @@
 
 * **Status:** Accepted
 * **Date:** 2026-09-11
+* **Updated:** 2026-09-13
 
 ## Context
 
@@ -30,7 +31,7 @@ Adapters can map the same outcome consistently. A durable event store can later 
 
 ## Implementation Notes
 
-`createRuntimeIngestionHandler()` optionally accepts an `EventStore`. When present, the store is checked before runtime ingestion and receives the event after successful runtime processing. Persistence retries do not re-run runtime ingestion; the runtime's event-id deduplication remains the in-process guard.
+`createRuntimeIngestionHandler()` optionally accepts an `EventStore`. When present, the event is durably appended before runtime ingestion. The append operation returns `inserted` or `duplicate`; both outcomes are safely passed through the runtime's event-id deduplication.
 
 ## Impact
 
