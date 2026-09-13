@@ -1,4 +1,4 @@
-import { RuntimeError } from "./runtime-error.js";
+import { RuntimeError } from "./runtime-error";
 
 export class DuplicateRegistrationError extends RuntimeError {
   constructor(kind: "projection" | "query", name: string) {

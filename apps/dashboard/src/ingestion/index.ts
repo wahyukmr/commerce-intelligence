@@ -1,2 +1,2 @@
-export * from "./create-dashboard-ingestion.js";
-export * from "./create-dashboard-webhook-handler.js";
+export * from "./create-dashboard-ingestion";
+export * from "./create-dashboard-webhook-handler";

@@ -16,11 +16,13 @@ export type {
 } from "./contracts/snapshot";
 export { DuplicateRegistrationError } from "./errors/duplicate-registration-error";
 export { RuntimeError } from "./errors/runtime-error";
-export * from "./events/index";
-export * from "./input/index";
-export * from "./observability/index";
-export * from "./recovery/index";
+export * from "./events";
+export * from "./input";
+export * from "./lifecycle";
+export * from "./observability";
+export * from "./recovery";
 export { ProjectionRegistry } from "./registry/projection-registry";
 export { QueryRegistry } from "./registry/query-registry";
 export { Runtime } from "./runtime/runtime";
-export * from "./security/index";
+export * from "./security";
+export * from "./testing/adapter-contract";
