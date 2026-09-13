@@ -405,7 +405,7 @@ The current repository uses:
 | `@ci/shared`            | JIT         |
 | `@ci/runtime`           | JIT         |
 | `@ci/commerce`          | JIT         |
-| `@ci/simulation`        | Compiled    |
+| `@ci/simulation`        | JIT         |
 | `@ci/config-env`        | JIT         |
 | `@ci/config-typescript` | Config-only |
 | `@ci/config-vitest`     | Compiled    |
