@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import type { EventEnvelope } from "../contracts/event.js";
-import { DuplicateEventError, InMemoryEventStore } from "../events/event-store.js";
+import { InMemoryEventStore } from "../events/event-store.js";
+import { RuntimeNotReadyError, RuntimeReadiness } from "../lifecycle/runtime-readiness.js";
 import { InMemoryIngestionMetrics } from "../observability/ingestion-metrics.js";
 import { createMetricsIngestionObserver } from "../observability/ingestion-observer.js";
 import { Runtime } from "../runtime/runtime.js";
@@ -35,21 +36,41 @@ describe("createRuntimeIngestionHandler", () => {
     await expect(store.has("evt-1")).resolves.toBe(true);
   });
 
-  it("returns duplicate without reprocessing an already stored event", async () => {
+  it("persists before applying runtime state", async () => {
     const runtime = new Runtime({ tenantId: "tenant-1" });
     const store = new InMemoryEventStore();
-    await store.append(event());
+    const readiness = new RuntimeReadiness();
+    readiness.markReady();
 
     const handler = createRuntimeIngestionHandler(runtime, {
       eventStore: store,
+      readiness,
     });
 
-    await expect(handler(event())).resolves.toMatchObject({
-      status: "duplicate",
-      eventId: "evt-1",
+    const result = await handler(event());
+
+    expect(result.status).toBe("accepted");
+    expect(await store.has("evt-1")).toBe(true);
+  });
+
+  it("returns duplicate while still passing the event through runtime deduplication", async () => {
+    const runtime = new Runtime({ tenantId: "tenant-1" });
+    const store = new InMemoryEventStore();
+    const readiness = new RuntimeReadiness();
+    readiness.markReady();
+
+    await store.append(event());
+
+    const ingestSpy = vi.spyOn(runtime, "ingest");
+    const handler = createRuntimeIngestionHandler(runtime, {
+      eventStore: store,
+      readiness,
     });
 
-    expect(runtime.eventCount).toBe(0);
+    const result = await handler(event());
+
+    expect(result.status).toBe("duplicate");
+    expect(ingestSpy).toHaveBeenCalledTimes(1);
   });
 
   it("retries transient runtime persistence failures", async () => {
@@ -58,7 +79,7 @@ describe("createRuntimeIngestionHandler", () => {
     const append = vi.spyOn(store, "append");
     append
       .mockRejectedValueOnce(new Error("temporary storage failure"))
-      .mockImplementationOnce(async () => undefined);
+      .mockImplementationOnce(async () => ({ status: "inserted" }));
 
     const handler = createRuntimeIngestionHandler(runtime, {
       eventStore: store,
@@ -84,7 +105,7 @@ describe("createRuntimeIngestionHandler", () => {
   it("returns duplicate when persistence detects a concurrent delivery", async () => {
     const runtime = new Runtime({ tenantId: "tenant-1" });
     const store = new InMemoryEventStore();
-    vi.spyOn(store, "append").mockRejectedValueOnce(new DuplicateEventError("evt-1"));
+    vi.spyOn(store, "append").mockResolvedValueOnce({ status: "duplicate" });
 
     const handler = createRuntimeIngestionHandler(runtime, { eventStore: store });
 
@@ -94,6 +115,24 @@ describe("createRuntimeIngestionHandler", () => {
     });
 
     expect(runtime.eventCount).toBe(1);
+  });
+
+  it("blocks ingestion until recovery marks the runtime ready", async () => {
+    const runtime = new Runtime({ tenantId: "tenant-1" });
+    const store = new InMemoryEventStore();
+    const readiness = new RuntimeReadiness();
+    const handler = createRuntimeIngestionHandler(runtime, {
+      eventStore: store,
+      readiness,
+    });
+
+    await expect(handler(event())).rejects.toBeInstanceOf(RuntimeNotReadyError);
+    expect(await store.has("evt-1")).toBe(false);
+
+    readiness.markReady();
+    await expect(handler(event())).resolves.toMatchObject({
+      status: "accepted",
+    });
   });
 
   it("reports failure and metrics after retries are exhausted", async () => {

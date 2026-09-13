@@ -1,5 +1,6 @@
 import type { EventEnvelope } from "../contracts/event";
-import { DuplicateEventError, type EventStore } from "../events";
+import type { EventStore } from "../events";
+import type { RuntimeReadiness } from "../lifecycle";
 import type { Runtime } from "../runtime/runtime";
 import { assertValidEventEnvelope } from "./event-envelope-validation";
 import {
@@ -19,6 +20,7 @@ export interface RuntimeIngestionHandlerOptions {
   readonly eventStore?: EventStore;
   readonly retryPolicy?: IngestionRetryPolicy;
   readonly observer?: IngestionObserver;
+  readonly readiness?: RuntimeReadiness;
   readonly now?: () => number;
 }
 
@@ -37,62 +39,48 @@ export function createRuntimeIngestionHandler(
 
     try {
       assertValidEventEnvelope(event);
+      options.readiness?.assertReady();
 
       if (event.tenantId !== runtime.tenantId) {
         throw new Error(`event.tenantId does not match runtime tenant "${runtime.tenantId}"`);
       }
 
-      const stored = options.eventStore ? await options.eventStore.has(event.id) : false;
+      const result = await executeWithRetry(async () => {
+        attempts += 1;
 
-      if (stored) {
-        const outcome = createIngestionOutcome("duplicate", event);
-        await notify(options.observer?.onCompleted, event, outcome, {
-          eventId: event.id,
-          tenantId: event.tenantId,
-          status: "duplicate",
-          attempts,
-          durationMs: Math.max(0, now() - startedAt),
-        });
-        return outcome;
-      }
+        let appendResult: Awaited<ReturnType<EventStore["append"]>> = {
+          status: "inserted",
+        };
 
-      runtime.ingest([event]);
-
-      let attemptsUsed = 1;
-      let deliveryStatus: "accepted" | "duplicate" = "accepted";
-
-      const eventStore = options.eventStore;
-
-      if (eventStore) {
-        const result = await executeWithRetry(async () => {
-          attempts += 1;
-
+        if (options.eventStore) {
           try {
-            await eventStore.append(event);
+            appendResult = await options.eventStore.append(event);
           } catch (error) {
-            if (error instanceof DuplicateEventError) {
-              deliveryStatus = "duplicate";
-              return;
-            }
-
             throw new IngestionProcessingError(
-              "Event persistence failed after runtime ingestion",
+              "Event persistence failed before runtime ingestion",
               "transient",
               error,
             );
           }
-        }, retryPolicy);
+        }
 
-        attemptsUsed = result.attempts;
-      }
+        // Runtime owns idempotent projection application. This call is safe
+        // for both newly inserted and already persisted events.
+        runtime.ingest([event]);
 
-      const outcome = createIngestionOutcome(deliveryStatus, event);
+        return appendResult;
+      }, retryPolicy);
+
+      const outcome = createIngestionOutcome(
+        result.value.status === "duplicate" ? "duplicate" : "accepted",
+        event,
+      );
 
       await notify(options.observer?.onCompleted, event, outcome, {
         eventId: event.id,
         tenantId: event.tenantId,
-        status: deliveryStatus,
-        attempts: attemptsUsed,
+        status: outcome.status,
+        attempts: result.attempts,
         durationMs: Math.max(0, now() - startedAt),
       });
 
