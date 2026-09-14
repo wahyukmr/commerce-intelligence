@@ -1,4 +1,5 @@
-export * from "./compositions/index";
+export * from "./adapters";
+export * from "./compositions";
 export type {
   Customer,
   CustomerProjectionState,

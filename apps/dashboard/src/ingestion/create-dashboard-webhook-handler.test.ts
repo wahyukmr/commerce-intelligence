@@ -1,4 +1,4 @@
-import type { HttpIngestionComposition } from "@ci/runtime";
+import { type HttpIngestionComposition, HttpWebhookAdapter } from "@ci/runtime";
 import { describe, expect, it, vi } from "vitest";
 
 import { createDashboardWebhookHandler } from "./create-dashboard-webhook-handler.js";
@@ -8,7 +8,7 @@ function createComposition(result: {
   readonly body: unknown;
 }): HttpIngestionComposition {
   return {
-    adapter: undefined as never,
+    adapter: new HttpWebhookAdapter(),
     handle: vi.fn(async () => result),
     start: vi.fn(),
     stop: vi.fn(),

@@ -6,3 +6,5 @@ export * from "./ingestion-adapter";
 export * from "./ingestion-failure";
 export * from "./ingestion-observer";
 export * from "./ingestion-outcome";
+export * from "./rest-event-cursor-store";
+export * from "./rest-event-source-adapter";
