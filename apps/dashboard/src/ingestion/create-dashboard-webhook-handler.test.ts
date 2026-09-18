@@ -1,7 +1,7 @@
 import { type HttpIngestionComposition, HttpWebhookAdapter } from "@ci/runtime";
 import { describe, expect, it, vi } from "vitest";
 
-import { createDashboardWebhookHandler } from "./create-dashboard-webhook-handler.js";
+import { createDashboardWebhookHandler } from "./create-dashboard-webhook-handler";
 
 function createComposition(result: {
   readonly status: number;

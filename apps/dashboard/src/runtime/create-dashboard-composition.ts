@@ -4,7 +4,7 @@ import {
   createCommerceRuntimeComposition,
 } from "@ci/commerce";
 import type { Query } from "@ci/runtime";
-import { CommerceDashboardQueryService } from "../services/dashboard-query-service";
+import { CommerceDashboardQueryService } from "../analytics";
 
 export interface CreateDashboardCompositionOptions {
   readonly tenantId: string;

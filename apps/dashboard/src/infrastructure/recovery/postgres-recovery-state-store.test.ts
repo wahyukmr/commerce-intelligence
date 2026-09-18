@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   PostgresRecoveryStateStore,
   type PostgresRecoveryStateStoreClient,
-} from "./postgres-recovery-state-store.js";
+} from "./postgres-recovery-state-store";
 
 const snapshot = {
   runtimeVersion: 1,

@@ -1,7 +1,7 @@
 import { createCommerceQueryComposition } from "@ci/commerce";
 import type { Query } from "@ci/runtime";
 import { Runtime } from "@ci/runtime";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CommerceDashboardQueryService } from "./dashboard-query-service";
 
 function query(name: string): Query {
@@ -55,5 +55,30 @@ describe("CommerceDashboardQueryService", () => {
     const service = new CommerceDashboardQueryService(runtime, composition);
 
     expect(service.execute<string, string>("commerce.revenue.summary", "input")).toBe("input");
+  });
+
+  it("passes offset and limit into runtime query input", () => {
+    const topProduct = query("commerce.product.analytics.top");
+
+    const composition = createCommerceQueryComposition({
+      product: [topProduct],
+    });
+
+    const runtime = new Runtime({ tenantId: "tenant-1" });
+    runtime.registerQuery(topProduct);
+    const spy = vi.spyOn(runtime, "query");
+    const service = new CommerceDashboardQueryService(runtime, composition);
+
+    service.executePage(
+      "commerce.product.analytics.top",
+      { category: "shoes" },
+      { offset: 20, limit: 10 },
+    );
+
+    expect(spy).toHaveBeenCalledWith("commerce.product.analytics.top", {
+      category: "shoes",
+      offset: 20,
+      limit: 10,
+    });
   });
 });
