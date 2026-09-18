@@ -37,7 +37,7 @@ export class PostgresEventStore implements EventStore {
   private readonly client: PostgresEventStoreClient;
   private readonly tableName: string;
 
-  public constructor({ client, tableName = "commerce_events" }: PostgresEventStoreOptions) {
+  constructor({ client, tableName = "commerce_events" }: PostgresEventStoreOptions) {
     this.client = client;
     this.tableName = assertSafeIdentifier(tableName);
   }

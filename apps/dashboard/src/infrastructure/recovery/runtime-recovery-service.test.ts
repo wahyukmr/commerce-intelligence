@@ -6,7 +6,7 @@ import {
 } from "@ci/runtime";
 import { describe, expect, it } from "vitest";
 
-import { recoverRuntime } from "./runtime-recovery-service.js";
+import { recoverRuntime } from "./runtime-recovery-service";
 
 function createEvent(id: string) {
   return {

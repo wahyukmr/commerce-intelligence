@@ -1,7 +1,7 @@
 import type { EventEnvelope } from "@ci/runtime";
 import { Runtime } from "@ci/runtime";
 import { describe, expect, it } from "vitest";
-import { createDashboardIngestion } from "./create-dashboard-ingestion.js";
+import { createDashboardIngestion } from "./create-dashboard-ingestion";
 
 const event: EventEnvelope = {
   id: "evt-dashboard-1",

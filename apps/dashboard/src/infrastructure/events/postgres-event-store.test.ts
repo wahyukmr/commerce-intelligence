@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { PostgresEventStore, type PostgresEventStoreClient } from "./postgres-event-store.js";
+import { PostgresEventStore, type PostgresEventStoreClient } from "./postgres-event-store";
 
 const event = {
   id: "evt-1",

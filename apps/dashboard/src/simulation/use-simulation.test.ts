@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createDashboardComposition } from "../runtime/create-dashboard-composition";
+import { createDashboardComposition } from "../runtime";
 import { useSimulation } from "./use-simulation";
 
 describe("useSimulation", () => {

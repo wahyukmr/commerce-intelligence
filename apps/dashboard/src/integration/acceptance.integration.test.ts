@@ -1,8 +1,7 @@
 import type { Query } from "@ci/runtime";
 import { describe, expect, it } from "vitest";
-import { createDashboardComposition } from "../runtime/create-dashboard-composition";
-import { defineDashboardQueryRef } from "../services/dashboard-query-ref";
-import { executeDashboardQuery } from "../services/execute-dashboard-query";
+import { DefaultDashboardAnalyticsController, defineDashboardQueryRef } from "../analytics";
+import { createDashboardComposition } from "../runtime";
 
 function createEventCountQuery(): Query {
   return {
@@ -15,10 +14,10 @@ function createEventCountQuery(): Query {
 
 describe("Acceptance Tests", () => {
   it("uses one application composition from ingestion through typed query execution", () => {
-    const query = createEventCountQuery();
+    const eventCount = createEventCountQuery();
     const composition = createDashboardComposition({
       tenantId: "tenant-a",
-      queries: { revenue: [query] },
+      queries: { revenue: [eventCount] },
     });
 
     composition.runtime.ingest([
@@ -38,15 +37,17 @@ describe("Acceptance Tests", () => {
       },
     ]);
 
-    const ref = defineDashboardQueryRef<undefined, { eventCount: number }>(
+    const query = defineDashboardQueryRef<undefined, { eventCount: number }>(
       "commerce.revenue.integration.event_count",
     );
 
-    const result = executeDashboardQuery(composition.queryService, ref, undefined);
+    const controller = new DefaultDashboardAnalyticsController(composition.queryService);
+
+    const result = controller.execute(query, undefined);
 
     expect(result.eventCount).toBe(1);
-    expect(composition.queryComposition.all).toEqual([query]);
-    expect(composition.queryService.list("revenue")).toEqual([query]);
+    expect(composition.queryComposition.all).toEqual([eventCount]);
+    expect(composition.queryService.list("revenue")).toEqual([eventCount]);
   });
 
   it("keeps the runtime and read boundary tied to the same application instance", () => {
@@ -58,9 +59,12 @@ describe("Acceptance Tests", () => {
 
   it("does not expose raw runtime querying from the typed read helper", () => {
     const composition = createDashboardComposition({ tenantId: "tenant-a" });
-    const service = composition.queryService;
-    const ref = defineDashboardQueryRef<undefined, unknown>("commerce.revenue.integration.missing");
+    const query = defineDashboardQueryRef<undefined, unknown>(
+      "commerce.revenue.integration.missing",
+    );
 
-    expect(() => executeDashboardQuery(service, ref, undefined)).toThrow(/Unknown commerce query/);
+    const controller = new DefaultDashboardAnalyticsController(composition.queryService);
+
+    expect(() => controller.execute(query, undefined)).toThrow(/Unknown commerce query/);
   });
 });

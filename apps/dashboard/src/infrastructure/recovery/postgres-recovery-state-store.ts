@@ -23,10 +23,7 @@ export class PostgresRecoveryStateStore implements RecoveryStateStore {
   private readonly client: PostgresRecoveryStateStoreClient;
   private readonly tableName: string;
 
-  public constructor({
-    client,
-    tableName = "runtime_recovery_state",
-  }: PostgresRecoveryStateStoreOptions) {
+  constructor({ client, tableName = "runtime_recovery_state" }: PostgresRecoveryStateStoreOptions) {
     this.client = client;
     this.tableName = assertSafeIdentifier(tableName);
   }
